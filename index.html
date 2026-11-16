@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#160a35">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>La Quinta del Buitre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- HUD de combate -->
+  <div id="hud" class="hidden">
+    <div class="hud-side p1">
+      <canvas class="portrait" width="120" height="120"></canvas>
+      <div class="bars">
+        <div class="name"></div>
+        <div class="hp"><div class="hp-ghost"></div><div class="hp-fill"></div></div>
+        <div class="en"><div class="en-fill"></div><span class="en-label"></span></div>
+      </div>
+    </div>
+    <div class="hud-mid">
+      <div class="timer">99</div>
+      <button id="btn-pause" aria-label="Pausa">II</button>
+    </div>
+    <div class="hud-side p2">
+      <canvas class="portrait" width="120" height="120"></canvas>
+      <div class="bars">
+        <div class="name"></div>
+        <div class="hp"><div class="hp-ghost"></div><div class="hp-fill"></div></div>
+        <div class="en"><div class="en-fill"></div><span class="en-label"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="banner"></div>
+  <div id="hint" class="hidden"></div>
+
+  <!-- Controles táctiles -->
+  <div id="touch" class="hidden">
+    <div id="joy-zone">
+      <div id="joy-base">
+        <span class="joy-arrow l">◀</span><span class="joy-arrow r">▶</span>
+        <div id="joy-knob"></div>
+      </div>
+    </div>
+    <div id="btns">
+      <button class="tbtn special" data-act="special" aria-label="Golpe especial">
+        <svg viewBox="0 0 48 48"><path d="M28 3 9 27h11l-3 18 21-26H26z"/></svg>
+      </button>
+      <button class="tbtn kick" data-act="kick" aria-label="Patada">
+        <svg viewBox="0 0 48 48"><path d="M14 5h13v20l15 7c3 1.500 4 4 4 7v3H14z"/><rect x="14" y="36" width="32" height="5" opacity=".45"/></svg>
+      </button>
+      <button class="tbtn punch" data-act="punch" aria-label="Puñetazo">
+        <svg viewBox="0 0 48 48"><path d="M10 16c0-4 3-6 6-6h18c5 0 9 4 9 9v8c0 6-5 11-11 11H18c-5 0-8-4-8-8z"/><path d="M19 10v12M27 10v12M35 12v10M10 26h16" fill="none" stroke="#1a1026" stroke-width="3" stroke-linecap="round"/></svg>
+      </button>
+      <button class="tbtn jump" data-act="jump" aria-label="Salto">
+        <svg viewBox="0 0 48 48"><path d="M24 4 44 26H32v18H16V26H4z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Pantalla inicial -->
+  <section id="screen-title" class="screen">
+    <div class="logo"><span class="l1">HEAD</span><span class="l2">FIGHTER</span></div>
+    <p class="sub">CABEZONES · TORTAS · COLEGAS</p>
+    <button id="btn-play" class="btn-big">JUGAR</button>
+    <div class="corner">
+      <button id="btn-full" class="btn-mini" aria-label="Pantalla completa">⛶</button>
+      <button id="btn-mute" class="btn-mini" aria-label="Sonido">♪</button>
+    </div>
+  </section>
+
+  <!-- Selección de personaje -->
+  <section id="screen-select" class="screen hidden">
+    <h2>ELIGE LUCHADOR</h2>
+    <div class="modes">
+      <button data-mode="cpu" class="on">1 JUGADOR vs CPU</button>
+      <button data-mode="2p">2 JUGADORES</button>
+    </div>
+    <div class="sel-row">
+      <div class="sel-side" data-side="0"></div>
+      <div class="vs-mini">VS</div>
+      <div class="sel-side" data-side="1"></div>
+    </div>
+    <div class="sel-actions">
+      <button id="btn-back" class="btn-small">◀ VOLVER</button>
+      <div class="diff">
+        <span>CPU</span>
+        <button data-level="0">FÁCIL</button><button data-level="1" class="on">NORMAL</button><button data-level="2">DIFÍCIL</button>
+      </div>
+      <button id="btn-fight" class="btn-big">¡A PELEAR!</button>
+    </div>
+  </section>
+
+  <!-- Presentación VS -->
+  <section id="screen-vs" class="screen hidden">
+    <div class="vs-panel left"><canvas width="300" height="300"></canvas><div class="vs-name"></div><div class="vs-tag"></div></div>
+    <div class="vs-big">VS</div>
+    <div class="vs-panel right"><canvas width="300" height="300"></canvas><div class="vs-name"></div><div class="vs-tag"></div></div>
+  </section>
+
+  <!-- Final de partida -->
+  <section id="screen-result" class="screen hidden">
+    <div class="res-top">
+      <div class="res-title"></div>
+      <div class="res-sub"></div>
+    </div>
+    <div class="res-actions">
+      <button id="btn-rematch" class="btn-big">REVANCHA</button>
+      <button id="btn-change" class="btn-small">CAMBIAR LUCHADORES</button>
+      <button id="btn-menu" class="btn-small">MENÚ</button>
+    </div>
+  </section>
+
+  <!-- Pausa -->
+  <section id="screen-pause" class="screen hidden">
+    <h2>PAUSA</h2>
+    <button id="btn-resume" class="btn-big">CONTINUAR</button>
+    <button id="btn-quit" class="btn-small">SALIR AL MENÚ</button>
+  </section>
+
+  <div id="rotate"><div class="phone">↻</div><p>Gira el móvil para jugar en horizontal</p></div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

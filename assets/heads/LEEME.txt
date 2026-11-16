@@ -1,0 +1,9 @@
+Aquí van las fotos de las cabezas de los personajes (PNG o WebP).
+
+Consejos:
+- Recorta la foto a la cara, más o menos cuadrada (400x400 px o más).
+- Mejor con fondo transparente, aunque no es obligatorio: el juego la recorta en óvalo.
+- La cara debería mirar de frente o ligeramente hacia la derecha.
+
+Se enlazan desde src/characters/defs/<personaje>.js con:
+  head: { type: 'image', src: 'assets/heads/<archivo>.png', shape: 'oval' }
