@@ -16,7 +16,7 @@ El proceso habitual (caricatura a partir de la foto) está en docs/claude/monigo
 - `groups`: grupos a los que pertenece, uno o ambos: `['lps']`, `['quinta']`, `['lps', 'quinta']`. Sin el campo, aparece en todos. Se definen en `src/characters/groups.js` (nombre y color).
 - `head`:
   - foto: `{ type: 'image', src, shape: 'oval'|'circle', size, zoom, offsetX, offsetY, mirror }`. Se recorta en óvalo con ajuste "cover" (mantiene proporciones). `offsetX/Y` van en radios de cabeza. `mirror: false` evita voltear la foto al mirar a la izquierda. Si la imagen falla o aún carga, se usa `head.art`.
-  - dibujada: `{ type: 'drawn', size, art }` con `art = { skin, hair, hairColor, hairColor2, brows, eye, wide, extra: [...], extraColor, beardColor, mustacheColor }`. `hair`: `short`, `spikes`, `flame`, `pigtails`, `bald`, `quiff` (tupé con sienes degradadas), `crop` (corto con sienes degradadas), `fringe` (texturizado con flequillo), `curtain` (media melena corta con raya), `buzz` (rapado). `extra`: `headband`, `beard`, `mustache`, `glasses`, `lashes`, `cheeks`, `freckles`, `thickBrows`, `earring`, `dimples`, `stubble` (barba de pocos días), `goatee` (`goateeColor`), `thinMustache`, `mole`, `lids` (párpados caídos). Para caricaturas: `face: 'long'` (cara alargada), `nose: 'long'`, `smile: 'teeth'`, `brow: 'soft'`, `eyeSize`.
+  - dibujada: `{ type: 'drawn', size, art }` con `art = { skin, hair, hairColor, hairColor2, brows, eye, wide, extra: [...], extraColor, beardColor, mustacheColor }`. `hair`: `short`, `spikes`, `flame`, `pigtails`, `bald`, `quiff` (tupé con sienes degradadas), `crop` (corto con sienes degradadas), `fringe` (texturizado con flequillo), `bangs` (tupido y recto sobre la frente, lados rapados), `curtain` (media melena corta con raya), `buzz` (rapado). `extra`: `headband`, `beard`, `mustache`, `glasses`, `lashes`, `cheeks`, `freckles`, `thickBrows`, `earring`, `dimples`, `stubble` (barba de pocos días), `goatee` (`goateeColor`), `thinMustache`, `mole`, `lids` (párpados caídos), `hoop` (aro pequeño), `earbud` (auricular). Para caricaturas: `face: 'long'` (cara alargada), `nose: 'long'`, `smile: 'teeth'|'flat'`, `brow: 'soft'`, `eyeSize`.
   - Las cabezas dibujadas cambian de expresión (`idle`, `attack`, `hurt`, `ko`, `win`); las fotos no, pero sí se inclinan, parpadean en blanco al recibir y llevan estrellitas en el K.O.
 - `body`: `{ shirt, shorts, skin, gloves, shoes, detail, detailColor, scale, width, legs }`. `detail`: `stripe`, `bolt`, `star`, `flame`, `heart`, `beca` (camisa, corbata y beca de graduación o solapas de traje; `tieColor` = corbata), `cross` (americana abierta con colgante de cruz), `straps` (jersey y tirantes de mochila). `legs` alarga las piernas sin agrandar la cabeza (la caja de colisión no cambia).
 - `stats`: `{ health, speed, jump, power, weight }`. `health` en puntos (150 es lo normal); el resto son multiplicadores (1 = normal). `power` escala el daño de puñetazo y patada, no el del especial. `weight` reduce el retroceso recibido.
@@ -24,7 +24,7 @@ El proceso habitual (caricatura a partir de la foto) está en docs/claude/monigo
 
 ## Personajes actuales
 
-Los amigos se hacen como caricatura dibujada a partir de su foto (`type: 'drawn'`), no con la foto recortada. `nani` (Ñañi), `kalong` (KalonG), `jd` (JD), `pipo` (Pipo) y `minimocho` (MiniMocho) son amigos reales; los demás son ficticios, de prueba, y su grupo es provisional.
+Los amigos se hacen como caricatura dibujada a partir de su foto (`type: 'drawn'`), no con la foto recortada. `nani` (Ñañi), `kalong` (KalonG), `jd` (JD), `pipo` (Pipo), `minimocho` (MiniMocho) y `mogailes` (Mogailes) son amigos reales; los demás son ficticios, de prueba, y su grupo es provisional.
 
 | id | Estilo | Especial (tipo) | Grupos |
 |---|---|---|---|
@@ -37,3 +37,4 @@ Los amigos se hacen como caricatura dibujada a partir de su foto (`type: 'drawn'
 | jd | bajito, rápido y ligero | Cabezazo de Mini Peka (`dash` con `run` y `form`) | lps y quinta |
 | pipo | alto, equilibrado, cuerpo a cuerpo | Rodilla de acero (`dash` con `poses` y `form.body.steelKnee`) | lps |
 | minimocho | ligero, media distancia | Pota de ucraniana (`spray`) | lps |
+| mogailes | equilibrado, a distancia | La paliza de los primos (`gang`) | lps |

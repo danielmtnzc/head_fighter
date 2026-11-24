@@ -36,7 +36,7 @@ Si la foto es pequeña o no se distingue un rasgo, no inventarlo; pedir otra si 
 
 - Siempre caricatura (`type: 'drawn'`), nunca la foto recortada. La foto original no se guarda en el proyecto ni se sube al repositorio (`.gitignore` las bloquea en `assets/heads/`); cuando el personaje esté terminado, borrar las copias locales, confirmando antes con el usuario cuáles.
 - Reutilizar primero lo que hay en `art`. Si un rasgo no existe, añadirlo a `src/characters/heads.js` como opción reutilizable, sin cambiar a los demás.
-- El pelo es lo que más distingue: evitar que dos amigos compartan peinado idéntico. Usados: `quiff` (Ñañi), `crop` (KalonG), `fringe` (JD), `curtain` (Pipo), `buzz` (MiniMocho).
+- El pelo es lo que más distingue: evitar que dos amigos compartan peinado idéntico. Usados: `quiff` (Ñañi), `crop` (KalonG), `fringe` (JD), `curtain` (Pipo), `buzz` (MiniMocho), `bangs` (Mogailes).
 - Coordenadas en radios de cabeza, mirando a la derecha en tres cuartos: una sola oreja, la de la izquierda.
 - Altura: `body.legs` alarga o acorta piernas y `body.scale` agranda todo; valores en «Alturas».
 - `head.size` cerca de 1; si el pelo sube mucho, comprobar que no se corta en los retratos.
@@ -57,7 +57,7 @@ Todo personaje es de uno de estos cuatro tipos. La altura en unidades es `(88 + 
 | Tipo | Altura | Valores de partida (`body`) | Personajes |
 |---|---|---|---|
 | Pequeño | menos de 122 | `scale 0.92, legs 0.85` | JD (113), Chispa (120) |
-| Medio | 122–136 | `scale 1, legs 1` | Rayo (128), KalonG (128), MiniMocho (129), Brasas (131) |
+| Medio | 122–136 | `scale 1, legs 1` | Mogailes (123, medio-bajo), Rayo (128), KalonG (128), MiniMocho (129), Brasas (131) |
 | Alto | 137–148 | `scale 1.04, legs 1.45` | Ñañi (143), Pipo (143), Tanque (143) |
 | Súper alto | más de 148 | `scale 1.08, legs 1.9` (159; sin probar: revisar retratos y selección) | ninguno todavía |
 

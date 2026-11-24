@@ -87,6 +87,10 @@ export const sfx = {
     noise({ dur: 0.25, vol: 0.25, freq: 900 });
     tone({ type: 'sawtooth', f: 520, f2: 140, dur: 0.25, vol: 0.14 });
   },
+  whistle() {
+    tone({ type: 'sine', f: 1500, f2: 2500, dur: 0.16, vol: 0.22 });
+    tone({ type: 'sine', f: 2500, f2: 1300, dur: 0.24, vol: 0.22, delay: 0.17 });
+  },
   glass() {
     noise({ dur: 0.25, vol: 0.4, freq: 9000, q: 4 });
     [2100, 2900, 3700].forEach((f, i) => tone({ type: 'triangle', f, f2: f * 0.8, dur: 0.12, vol: 0.12, delay: i * 0.04 }));

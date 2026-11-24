@@ -14,6 +14,7 @@ Al activarse, `Match.onSpecialStart` hace la pausa dramática: congela, oscurece
 - **`multihit`** — ráfaga de golpes rápidos y remate. `params`: `startup`, `hits`, `interval`, `finisher` (fracción del daño que va al remate), `recovery`, `advance`. Los golpes de la ráfaga llevan `invuln: 0` para encadenar.
 - **`shotgun`** — saca una escopeta de feria, apunta y dispara un tapón rápido y recto (se puede saltar). `params`: `startup`, `recovery`, `speed`, `radius`, `muzzleX`, `muzzleY`, `recoil`.
 - **`spray`** — suelta por la boca un chorro que golpea una vez. `params`: `startup`, `duration`, `recovery`, `reach`, `mouthX`, `mouthY`, `sickSkin` (color de piel mientras dura).
+- **`gang`** — silba y una cuadrilla llega corriendo por detrás; cada uno pega una vez y el último remata (se pueden saltar). `params`: `startup`, `recovery`, `speed`, `gap` (separación), `behind` (distancia inicial), `finisher`, `crew` (lista de `{ art, body, size }`: cambios sobre el aspecto del luchador).
 
 ## Crear un tipo nuevo
 

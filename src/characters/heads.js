@@ -202,6 +202,28 @@ function drawDrawnHead(ctx, r, art, expr, t) {
     ctx.lineWidth = lw;
   }
 
+  if (art.extra?.includes('hoop')) {
+    // aro pequeño
+    ctx.beginPath();
+    ctx.arc(-rx * 0.94, r * 0.4, r * 0.1, 0, Math.PI * 2);
+    ctx.lineWidth = lw * 1.5;
+    ctx.stroke();
+    ctx.strokeStyle = '#cfd6de';
+    ctx.lineWidth = lw * 0.6;
+    ctx.stroke();
+    ctx.strokeStyle = OUTLINE;
+    ctx.lineWidth = lw;
+  }
+  if (art.extra?.includes('earbud')) {
+    // auricular inalámbrico
+    ctx.beginPath();
+    poly(ctx, r, [[-1.0, 0.0], [-0.84, 0.0], [-0.85, 0.32], [-0.95, 0.32]]);
+    ctx.closePath();
+    ctx.lineWidth = lw * 0.7;
+    fillStroke(ctx, '#ffffff');
+    ctx.lineWidth = lw;
+  }
+
   // --- cráneo
   const headPath = () => {
     ctx.beginPath();
@@ -240,7 +262,7 @@ function drawDrawnHead(ctx, r, art, expr, t) {
     ctx.ellipse(r * 0.26, r * 0.8, r * 0.95, r * 0.58, 0, 0, Math.PI * 2);
     ctx.fill();
   }
-  if (art.hair === 'quiff' || art.hair === 'crop' || art.hair === 'fringe' || art.hair === 'buzz') {
+  if (art.hair === 'quiff' || art.hair === 'crop' || art.hair === 'fringe' || art.hair === 'bangs' || art.hair === 'buzz') {
     // degradado rapado de las sienes
     const g = ctx.createLinearGradient(0, -r * 0.65, 0, r * 0.12);
     g.addColorStop(0, hairC);
@@ -364,6 +386,33 @@ function drawDrawnHead(ctx, r, art, expr, t) {
         ctx.beginPath();
         ctx.moveTo((x - 0.12) * r, (y - 0.2) * r);
         ctx.quadraticCurveTo((x + 0.02) * r, (y - 0.16) * r, (x + 0.04) * r, y * r);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = lw;
+      break;
+    }
+    case 'bangs': {
+      // pelo tupido que cae recto sobre la frente, con los lados rapados
+      ctx.beginPath();
+      poly(ctx, r, [[-0.82, -0.44], [-0.9, -0.62]]);
+      for (const [cx, cy, x, y] of [
+        [-1.0, -0.96, -0.74, -1.06], [-0.62, -1.3, -0.3, -1.24], [-0.1, -1.4, 0.16, -1.3],
+        [0.5, -1.34, 0.66, -1.12], [1.02, -1.02, 0.98, -0.58],
+      ]) ctx.quadraticCurveTo(cx * r, cy * r, x * r, y * r);
+      poly(ctx, r, [
+        [0.9, -0.42], [0.82, -0.58], [0.7, -0.42], [0.6, -0.58], [0.42, -0.4], [0.28, -0.58], [0.12, -0.42],
+        [-0.04, -0.6], [-0.2, -0.44], [-0.34, -0.6], [-0.54, -0.4],
+      ]);
+      ctx.quadraticCurveTo(-r * 0.66, -r * 0.54, -r * 0.82, -r * 0.44);
+      ctx.closePath();
+      fillStroke(ctx, hairC);
+      ctx.strokeStyle = art.hairColor2 || 'rgba(255,255,255,0.25)';
+      ctx.lineWidth = lw * 0.9;
+      for (const [x, y] of [[-0.68, -0.7], [-0.4, -0.72], [-0.1, -0.74], [0.2, -0.74], [0.5, -0.72], [0.78, -0.72]]) {
+        ctx.beginPath();
+        ctx.moveTo((0.1 + x * 0.7) * r, (y - 0.46) * r);
+        ctx.quadraticCurveTo((x + 0.02) * r, (y - 0.26) * r, x * r, y * r);
         ctx.stroke();
       }
       ctx.strokeStyle = OUTLINE;
@@ -645,6 +694,12 @@ function drawFace(ctx, r, art, expr, t, lw, hairC) {
       ctx.stroke();
     }
     ctx.restore();
+  } else if (art.smile === 'flat') {
+    // boca cerrada y seria
+    ctx.beginPath();
+    ctx.moveTo(mx - r * 0.22, my);
+    ctx.quadraticCurveTo(mx, my + r * 0.03, mx + r * 0.22, my - r * 0.03);
+    ctx.stroke();
   } else {
     ctx.beginPath();
     ctx.moveTo(mx - r * 0.24, my - r * 0.02);
