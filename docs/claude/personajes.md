@@ -37,4 +37,4 @@ Los amigos se hacen como caricatura dibujada a partir de su foto (`type: 'drawn'
 | jd | bajito, rápido y ligero | Cabezazo de Mini Peka (`dash` con `run` y `form`) | lps y quinta |
 | pipo | alto, equilibrado, cuerpo a cuerpo | Rodilla de acero (`dash` con `poses` y `form.body.steelKnee`) | lps |
 | minimocho | ligero, media distancia | Pota de ucraniana (`spray`) | lps |
-| mogailes | equilibrado, a distancia | La paliza de los primos (`gang`) | lps |
+| mogailes | equilibrado, a distancia | Paliza de las 600 (`gang`) | lps |

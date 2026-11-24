@@ -19,7 +19,7 @@ export default {
   },
   stats: { health: 150, speed: 1.03, jump: 1.02, power: 1, weight: 0.98 },
   special: {
-    name: 'La paliza de los primos',
+    name: 'Paliza de las 600',
     description: 'Silba y sus primos llegan corriendo a repartir en tromba.',
     type: 'gang',
     damage: 22,
