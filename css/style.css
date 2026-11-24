@@ -230,8 +230,20 @@ h2 { font-size: 3.6rem; color: var(--yellow); -webkit-text-stroke: .5rem var(--i
 .stat i b { display: block; height: 100%; background: var(--c); border-radius: .35rem; }
 .info .sp { margin-top: .4rem; font-size: 1.4rem; color: var(--yellow); line-height: 1.1; }
 .info .spd { font-family: system-ui, sans-serif; font-weight: 500; letter-spacing: 0; font-size: 1.05rem; opacity: .85; line-height: 1.2; }
-.picks { display: flex; gap: .4rem; justify-content: center; flex-wrap: wrap; }
-.pick { flex: 1 1 3.5rem; max-width: 6rem; aspect-ratio: 1; border-radius: .8rem; background: #0006; border: .25rem solid #0008; padding: 0; overflow: hidden; }
+/* una sola fila; si no caben se desliza con el dedo (flechas en los lados con más retratos) */
+.picks-wrap { position: relative; flex: none; }
+.picks { display: flex; gap: .4rem; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; padding: .4rem; margin: -.4rem; }
+.picks::-webkit-scrollbar { display: none; }
+.picks, .picks * { touch-action: pan-x; }
+.picks::before, .picks::after { content: ''; margin: auto; } /* centra si sobra sitio, sin cortar al deslizar */
+.picks-wrap::before, .picks-wrap::after {
+  position: absolute; top: 0; bottom: 0; z-index: 1; width: 2.2rem; display: none; align-items: center; justify-content: center;
+  pointer-events: none; font: 1.6rem system-ui, sans-serif; color: #fff;
+}
+.picks-wrap::before { content: '◀'; left: -.4rem; background: linear-gradient(90deg, #1b0b33 40%, transparent); }
+.picks-wrap::after { content: '▶'; right: -.4rem; background: linear-gradient(-90deg, #1b0b33 40%, transparent); }
+.picks-wrap.more-l::before, .picks-wrap.more-r::after { display: flex; }
+.pick { flex: 1 0 3.2rem; max-width: 6rem; aspect-ratio: 1; border-radius: .8rem; background: #0006; border: .25rem solid #0008; padding: 0; overflow: hidden; }
 .pick canvas { width: 100%; height: 100%; display: block; }
 .pick.on { border-color: #fff; background: var(--pc); box-shadow: 0 0 1rem var(--pc); }
 .sel-actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }

@@ -49,7 +49,7 @@ export class SelectScreen {
           <div class="sp"></div><div class="spd"></div>
         </div>
       </div>
-      <div class="picks"></div>`;
+      <div class="picks-wrap"><div class="picks"></div></div>`;
     const picks = el.querySelector('.picks');
     const buttons = this.roster.map((cfg, i) => {
       const b = document.createElement('button');
@@ -64,6 +64,14 @@ export class SelectScreen {
       picks.appendChild(b);
       return b;
     });
+    // avisa de que hay más retratos a los lados
+    const hints = () => {
+      const max = picks.scrollWidth - picks.clientWidth;
+      picks.parentElement.classList.toggle('more-l', picks.scrollLeft > 4);
+      picks.parentElement.classList.toggle('more-r', picks.scrollLeft < max - 4);
+    };
+    picks.addEventListener('scroll', hints, { passive: true });
+    new ResizeObserver(hints).observe(picks);
     // pestañas de grupo: filtran los luchadores que se ven, sin cambiar el elegido
     const tabs = GROUPS.map((g) => {
       const b = document.createElement('button');
@@ -76,13 +84,15 @@ export class SelectScreen {
       el.querySelector('.groups').appendChild(b);
       return b;
     });
-    return { el, buttons, tabs, ctx: el.querySelector('.preview').getContext('2d'), fighter: null };
+    return { el, buttons, tabs, picks, hints, ctx: el.querySelector('.preview').getContext('2d'), fighter: null };
   }
 
   showGroup(side, id) {
     const s = this.sides[side];
     s.tabs.forEach((b, i) => b.classList.toggle('on', GROUPS[i].id === id));
     s.buttons.forEach((b, i) => b.classList.toggle('hidden', !groupsOf(this.roster[i]).some((g) => g.id === id)));
+    s.picks.scrollLeft = 0;
+    s.hints();
   }
 
   refresh(side) {

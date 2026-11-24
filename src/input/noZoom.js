@@ -7,9 +7,9 @@ export function blockZoom() {
   const menuButton = (el) => el.closest?.('button:not(.tbtn)');
   let lastEnd = -Infinity;
 
-  // fuera de los botones de menú no hace falta ningún gesto nativo (los controles usan Pointer Events)
+  // fuera de los botones de menú y de la fila deslizable de retratos no hace falta ningún gesto nativo (los controles usan Pointer Events)
   document.addEventListener('touchstart', (e) => {
-    if (e.cancelable && !menuButton(e.target)) e.preventDefault();
+    if (e.cancelable && !menuButton(e.target) && !e.target.closest?.('.picks')) e.preventDefault();
   }, opts);
 
   document.addEventListener('touchend', (e) => {
