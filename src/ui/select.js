@@ -3,6 +3,7 @@
 import { Fighter } from '../characters/fighter.js';
 import { drawFighterPreview } from '../characters/fighterRenderer.js';
 import { drawHead } from '../characters/heads.js';
+import { GROUPS, groupsOf, groupBadges } from '../characters/groups.js';
 import { sfx } from '../engine/audio.js';
 
 const STATS = [['VIDA', 'health', 180], ['VELOCIDAD', 'speed', 1.35], ['FUERZA', 'power', 1.3], ['SALTO', 'jump', 1.2]];
@@ -34,13 +35,14 @@ export class SelectScreen {
     );
     this.refresh(0);
     this.refresh(1);
+    this.picks.forEach((i, side) => this.showGroup(side, groupsOf(roster[i])[0]?.id ?? GROUPS[0].id));
   }
 
   buildSide(el, side) {
     el.innerHTML = `
-      <h3></h3>
+      <div class="sel-head"><h3></h3><div class="groups"></div></div>
       <div class="sel-main">
-        <canvas class="preview" width="252" height="288"></canvas>
+        <div class="pv"><canvas class="preview" width="252" height="288"></canvas><div class="badges"></div></div>
         <div class="info">
           <div class="nm"></div><div class="tag"></div>
           <div class="stats">${STATS.map(([l]) => `<div class="stat"><span>${l}</span><i><b></b></i></div>`).join('')}</div>
@@ -62,7 +64,25 @@ export class SelectScreen {
       picks.appendChild(b);
       return b;
     });
-    return { el, buttons, ctx: el.querySelector('.preview').getContext('2d'), fighter: null };
+    // pestañas de grupo: filtran los luchadores que se ven, sin cambiar el elegido
+    const tabs = GROUPS.map((g) => {
+      const b = document.createElement('button');
+      b.textContent = g.name;
+      b.style.setProperty('--gc', g.color);
+      b.addEventListener('click', () => {
+        sfx.select();
+        this.showGroup(side, g.id);
+      });
+      el.querySelector('.groups').appendChild(b);
+      return b;
+    });
+    return { el, buttons, tabs, ctx: el.querySelector('.preview').getContext('2d'), fighter: null };
+  }
+
+  showGroup(side, id) {
+    const s = this.sides[side];
+    s.tabs.forEach((b, i) => b.classList.toggle('on', GROUPS[i].id === id));
+    s.buttons.forEach((b, i) => b.classList.toggle('hidden', !groupsOf(this.roster[i]).some((g) => g.id === id)));
   }
 
   refresh(side) {
@@ -71,6 +91,7 @@ export class SelectScreen {
     s.el.style.setProperty('--c', cfg.color);
     s.el.querySelector('h3').textContent = side === 0 ? 'JUGADOR 1' : this.mode === 'cpu' ? 'RIVAL (CPU)' : 'JUGADOR 2';
     s.el.querySelector('.nm').textContent = cfg.name;
+    s.el.querySelector('.badges').innerHTML = groupBadges(cfg);
     s.el.querySelector('.tag').textContent = cfg.tagline || '';
     s.el.querySelectorAll('.stat b').forEach((b, i) => {
       const [, key, max] = STATS[i];

@@ -6,6 +6,7 @@
 //   start(f, sp, world, a)        se llama al empezar
 //   update(f, sp, world, dt, a)   cada paso; devuelve true cuando termina
 //   pose(f, a, sp)                nombre de la pose (ver characters/poses.js)
+//   prop?(ctx, f, a, sp)          dibuja un objeto en la mano delantera (+x = hacia delante)
 //   cancel?(f, a)                 si le golpean a mitad
 // `a` es la acción en curso: a.t = tiempo, a.s = estado libre, a.keepVel = sin fricción.
 //
@@ -14,5 +15,7 @@ import projectile from './projectile.js';
 import dash from './dash.js';
 import explosion from './explosion.js';
 import multihit from './multihit.js';
+import shotgun from './shotgun.js';
+import spray from './spray.js';
 
-export const SPECIALS = { projectile, dash, explosion, multihit };
+export const SPECIALS = { projectile, dash, explosion, multihit, shotgun, spray };

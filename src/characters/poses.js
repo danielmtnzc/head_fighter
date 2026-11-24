@@ -60,6 +60,16 @@ const STATIC = {
   slamDown: [P({ lean: 0.55, af: [0.8, 0.2], ab: [0.6, 0.2], asF: 1.5, asB: 1.5, lf: [1.0, -1.8], lb: [-0.2, -1.2], headTilt: -0.3, sx: 1.12, sy: 0.9 }), 60],
   flurryA: [P({ lean: 0.28, af: [1.5, 0.05], asF: 2.3, ab: [-0.6, 2.1], lf: [0.5, -0.5], lb: [-0.6, 0.1], headTilt: -0.1 }), 70],
   flurryB: [P({ lean: 0.2, ab: [1.45, 0.05], asB: 2.4, af: [-0.6, 2.2], lf: [0.5, -0.5], lb: [-0.6, 0.1], headTilt: -0.05 }), 70],
+  headbutt: [P({ lean: 0.75, headX: 16, headY: 4, headTilt: -0.1, af: [-0.9, 0.3], ab: [-1.1, 0.2], lf: [0.7, -0.7], lb: [-0.8, 0] }), 60],
+  transform: [P({ lean: 0.25, headY: 5, af: [0.9, 1.9], ab: [0.6, 2.0], lf: [0.6, -0.9], lb: [-0.4, -0.7], sx: 1.06, sy: 0.92 }), 24],
+  kneeWind: [P({ lean: -0.15, lf: [1.75, -2.2], lsF: 2, lb: [-0.15, -0.15], af: [0.9, 1.6], ab: [-0.6, 1.2], headTilt: 0.1 }), 26],
+  kneeFly: [P({ dy: -24, lean: -0.22, lf: [1.75, -2.3], lsF: 3.1, lb: [-0.7, -0.7], af: [-0.7, 0.6], ab: [-1.2, 0.2], headTilt: -0.05 }), 50],
+  sickWind: [P({ lean: -0.2, headTilt: -0.15, headY: 3, af: [0.5, 1.9], ab: [0.4, 1.9], lf: [0.5, -0.8], lb: [-0.4, -0.5], sx: 1.05, sy: 0.95 }), 18],
+  sickGo: [P({ lean: 0.4, headTilt: 0.05, headX: 6, af: [-0.7, 0.4], ab: [-0.9, 0.3], lf: [0.6, -0.5], lb: [-0.6, 0.05] }), 40],
+  itemWind: [P({ lean: -0.15, af: [2.15, 0.45], ab: [0.9, 0.6], asF: 2.7, lf: [0.6, -0.6], lb: [-0.5, -0.2], headTilt: 0.05 }), 22],
+  gunDraw: [P({ lean: -0.2, af: [2.5, 0.2], ab: [0.8, 1.2], asF: 1.2, lf: [0.5, -0.5], lb: [-0.4, -0.1], headTilt: -0.08 }), 30],
+  gunAim: [P({ lean: 0.04, af: [1.55, 0.02], ab: [0.9, 0.9], asF: 1.4, lf: [0.6, -0.5], lb: [-0.6, 0.05], headTilt: 0.12 }), 30],
+  gunRecoil: [P({ lean: -0.3, af: [1.9, 0.1], ab: [0.7, 1.1], asF: 1.25, lf: [0.7, -0.5], lb: [-0.7, 0.1], headTilt: -0.15 }), 60],
   uppercut: [P({ lean: -0.2, dy: -8, af: [2.75, 0.15], asF: 2.2, ab: [-0.7, 1.0], lf: [0.2, -0.1], lb: [-0.3, 0.2], headTilt: -0.2, sy: 1.1, sx: 0.94 }), 60],
 };
 
@@ -92,6 +102,19 @@ export function targetPose(f) {
           ab: [0.15 + s * 0.2, 1.75],
         }),
         22,
+      ];
+    }
+    case 'headRun': {
+      // carrera con la cabeza por delante
+      const s = Math.sin(f.walkPhase);
+      const c = Math.cos(f.walkPhase);
+      return [
+        P({
+          dy: -Math.abs(c) * 5, lean: 0.5, headX: 7, headTilt: -0.05,
+          lf: [s * 1.2, -0.4 - Math.max(0, c) * 1.1], lb: [-s * 1.2, -0.4 - Math.max(0, -c) * 1.1],
+          af: [-s * 1.2, 1.3], ab: [s * 1.2, 1.3],
+        }),
+        40,
       ];
     }
     case 'win': {

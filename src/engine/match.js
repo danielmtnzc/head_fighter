@@ -61,7 +61,7 @@ export class Match {
     this.hitstop = Math.max(this.hitstop, spec.hitstop || 0);
     this.camera.shake(spec.shake || 0);
     const word = spec.text === undefined ? (power >= 2 ? HIT_WORDS[Math.floor(rand(HIT_WORDS.length))] : null) : spec.text;
-    if (word && typeof word === 'string') this.fx.text(x, y - 46, word, color, power >= 3 ? 56 : 42);
+    if (word && typeof word === 'string') this.fx.text(x, y - 46, word, color, (power >= 3 ? 56 : 42) * Math.min(1, 11 / word.length));
     if (power >= 3) this.fx.flash('#fff', 0.3);
     if (!this.silent) sfx.hit(power);
     if (!spec.special) att.energy = Math.min(100, att.energy + spec.damage * 0.9);

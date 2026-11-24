@@ -4,6 +4,7 @@ export default {
   name: 'TANQUE',
   tagline: 'No se mueve ni con grúa',
   color: '#2ec4b6',
+  groups: ['quinta'],
   head: {
     type: 'drawn',
     size: 1.04,

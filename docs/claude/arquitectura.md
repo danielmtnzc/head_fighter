@@ -18,6 +18,7 @@ src/combat/combat.js          cajas de colisión y resolución de impactos (tryH
 src/combat/specials/          un archivo por tipo de especial + index.js (registro)
 src/characters/defs/          una configuración por personaje (+ _plantilla.js)
 src/characters/roster.js      lista de personajes disponibles
+src/characters/groups.js      grupos de personajes (LPS, La Quinta del Buitre)
 src/characters/fighter.js     entidad luchador: estado, entrada, ataques, animación
 src/characters/poses.js       biblioteca de poses del esqueleto
 src/characters/fighterRenderer.js  dibujo del cuerpo por piezas

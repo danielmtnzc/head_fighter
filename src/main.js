@@ -1,6 +1,7 @@
 // Arranque y flujo de pantallas: título → selección → VS → combate → resultado.
 import { VIEW_H } from './config.js';
 import { ROSTER } from './characters/roster.js';
+import { groupBadges } from './characters/groups.js';
 import { preloadHeads, drawHead } from './characters/heads.js';
 import { Match } from './engine/match.js';
 import { initAudio, sfx, setMuted, isMuted } from './engine/audio.js';
@@ -117,6 +118,7 @@ function startMatch() {
     p.style.setProperty('--c', cfg.color);
     p.querySelector('.vs-name').textContent = cfg.name;
     p.querySelector('.vs-tag').textContent = cfg.tagline || '';
+    p.querySelector('.vs-badges').innerHTML = groupBadges(cfg);
     const c = p.querySelector('canvas').getContext('2d');
     c.setTransform(1, 0, 0, 1, 0, 0);
     c.clearRect(0, 0, 300, 300);

@@ -78,7 +78,7 @@ export class Hud {
       c.translate(60, 66);
       if (i === 1) c.scale(-1, 1);
       c.translate(-4, 0);
-      drawHead(c, f.cfg, 40, f.expression(), f.animT, 1);
+      drawHead(c, f.look, 40, f.expression(), f.animT, 1);
     });
     const t = Math.ceil(match.time);
     this.timer.textContent = t;

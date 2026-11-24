@@ -4,6 +4,7 @@ export default {
   name: 'CHISPA',
   tagline: 'Pequeña pero matona',
   color: '#c77dff',
+  groups: ['quinta'],
   head: {
     type: 'drawn',
     size: 0.98,

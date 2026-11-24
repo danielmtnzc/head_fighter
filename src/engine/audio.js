@@ -87,6 +87,19 @@ export const sfx = {
     noise({ dur: 0.25, vol: 0.25, freq: 900 });
     tone({ type: 'sawtooth', f: 520, f2: 140, dur: 0.25, vol: 0.14 });
   },
+  glass() {
+    noise({ dur: 0.25, vol: 0.4, freq: 9000, q: 4 });
+    [2100, 2900, 3700].forEach((f, i) => tone({ type: 'triangle', f, f2: f * 0.8, dur: 0.12, vol: 0.12, delay: i * 0.04 }));
+  },
+  splash() {
+    noise({ dur: 0.45, vol: 0.4, freq: 700, q: 3 });
+    tone({ type: 'sawtooth', f: 170, f2: 70, dur: 0.4, vol: 0.14 });
+  },
+  shotgun() {
+    noise({ dur: 0.05, vol: 0.5, freq: 5000 });
+    noise({ dur: 0.3, vol: 0.45, freq: 1100 });
+    tone({ type: 'sine', f: 520, f2: 70, dur: 0.16, vol: 0.45 });
+  },
   ko() {
     tone({ type: 'sawtooth', f: 440, f2: 60, dur: 0.9, vol: 0.22 });
     noise({ dur: 0.6, vol: 0.4, freq: 600 });

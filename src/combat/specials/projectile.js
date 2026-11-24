@@ -1,8 +1,10 @@
 // ESPECIAL: PROYECTIL. El personaje lanza algo (bola de energía, objeto...).
 // params: startup, recovery, speed, radius, gravity?, vy?, life?, spawnX?, spawnY?, recoil?,
-//         sprite? (ruta de imagen para lanzar un objeto), spin? (rad/s)
+//         sprite? (ruta de imagen para lanzar un objeto), spin? (rad/s),
+//         item? (objeto dibujado de items.js, sale en la mano al cargar), windPose?
 import { STAGE, OUTLINE, rand } from '../../config.js';
 import { specialHit } from './common.js';
+import { ITEMS } from './items.js';
 import { sfx } from '../../engine/audio.js';
 
 const sprites = new Map();
@@ -32,6 +34,7 @@ class Projectile {
     this.rot = 0;
     this.dangerous = true;
     this.dead = false;
+    this.item = ITEMS[p.item];
     this.img = p.sprite ? sprite(p.sprite) : null;
   }
 
@@ -52,6 +55,10 @@ class Projectile {
       const x = Math.max(STAGE.left, Math.min(STAGE.right, this.x));
       world.fx.ring(x, Math.min(this.y, -4), fx.color2 || '#fff', 90, 0.3);
       for (let i = 0; i < 12; i++) world.fx.glow(x, this.y, i % 2 ? fx.color : fx.color2, rand(8, 18), rand(0.25, 0.5), rand(-260, 260), rand(-300, 120));
+      if (this.item) {
+        for (const c of this.item.shards) world.fx.debris(x, Math.min(this.y, -4), 5, c, 560);
+        sfx.glass();
+      }
       if (hit) sfx.boom();
     }
   }
@@ -60,7 +67,10 @@ class Projectile {
     const fx = this.sp.fx || {};
     ctx.save();
     ctx.translate(this.x, this.y);
-    if (this.img && this.img.complete && this.img.naturalWidth) {
+    if (this.item) {
+      ctx.rotate(this.rot);
+      this.item.draw(ctx);
+    } else if (this.img && this.img.complete && this.img.naturalWidth) {
       ctx.rotate(this.rot);
       const s = (this.r * 2.4) / Math.max(this.img.width, this.img.height);
       ctx.drawImage(this.img, (-this.img.width * s) / 2, (-this.img.height * s) / 2, this.img.width * s, this.img.height * s);
@@ -102,7 +112,7 @@ export default {
     const p = sp.params;
     if (!a.s.fired) {
       // carga: energía concentrándose en las manos
-      world.fx.glow(f.x - f.facing * 22 + rand(-16, 16), f.y - 52 + rand(-16, 16), sp.fx?.color || '#fff', rand(6, 12), 0.2);
+      if (!p.item) world.fx.glow(f.x - f.facing * 22 + rand(-16, 16), f.y - 52 + rand(-16, 16), sp.fx?.color || '#fff', rand(6, 12), 0.2);
       if (a.t >= p.startup) {
         a.s.fired = true;
         world.spawn(new Projectile(f, sp));
@@ -115,6 +125,16 @@ export default {
     return a.t >= p.startup + p.recovery;
   },
   pose(f, a, sp) {
-    return a.t < sp.params.startup ? 'castWind' : 'castThrow';
+    return a.t < sp.params.startup ? sp.params.windPose || 'castWind' : 'castThrow';
+  },
+  /** Objeto en la mano (origen en la mano, brazo hacia +x) hasta que se lanza. */
+  prop(ctx, f, a, sp) {
+    const item = ITEMS[sp.params.item];
+    if (!item || a.s.fired) return;
+    const k = Math.min(1, a.t / (sp.params.startup * 0.3));
+    ctx.rotate(-Math.PI / 2);
+    ctx.scale(k, k);
+    ctx.translate(0, item.grip);
+    item.draw(ctx);
   },
 };

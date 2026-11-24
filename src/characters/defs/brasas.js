@@ -4,6 +4,7 @@ export default {
   name: 'BRASAS',
   tagline: 'Siempre echando chispas',
   color: '#ff5a36',
+  groups: ['lps'],
   head: {
     type: 'drawn',
     size: 1,

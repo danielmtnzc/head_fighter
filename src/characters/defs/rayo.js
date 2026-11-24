@@ -4,6 +4,7 @@ export default {
   name: 'RAYO',
   tagline: 'El más rápido del barrio',
   color: '#ffd23f',
+  groups: ['lps'],
   head: {
     type: 'drawn',
     size: 1,

@@ -8,6 +8,7 @@ export default {
   name: 'PEPE', // nombre o apodo que se muestra
   tagline: 'Frase corta de presentación',
   color: '#3a86ff', // color principal (interfaz y efectos)
+  groups: ['lps', 'quinta'], // uno o ambos (ver ../groups.js)
 
   head: {
     type: 'image',
@@ -20,15 +21,16 @@ export default {
     mirror: true, // false = la foto no se voltea al mirar a la izquierda
     // Si la imagen no existe o falla, se usa esta cabeza dibujada:
     art: { skin: '#f2c79b', hair: 'short', hairColor: '#4a3728' },
-    // hair: 'short' | 'spikes' | 'flame' | 'pigtails' | 'bald'
-    // extra: ['headband','beard','mustache','glasses','lashes','cheeks','freckles','thickBrows']
+    // hair: 'short' | 'spikes' | 'flame' | 'pigtails' | 'bald' | 'quiff'
+    // extra: ['headband','beard','mustache','glasses','lashes','cheeks','freckles','thickBrows','earring','dimples']
   },
 
   body: {
     shirt: '#3a86ff', shorts: '#1d3557', skin: '#f2c79b', gloves: '#e63946', shoes: '#ffffff',
-    detail: 'star', // 'stripe' | 'bolt' | 'star' | 'flame' | 'heart' | null
+    detail: 'star', // 'stripe' | 'bolt' | 'star' | 'flame' | 'heart' | 'beca' | null
     scale: 1, // tamaño global del cuerpo
     width: 1, // anchura del torso
+    legs: 1, // longitud de piernas (más = más alto)
   },
 
   // 1 = valor normal. health es la vida en puntos (150 = normal).
@@ -37,7 +39,7 @@ export default {
   special: {
     name: 'Nombre del golpe',
     description: 'Qué hace.',
-    type: 'projectile', // 'projectile' | 'dash' | 'explosion' | 'multihit' (ver src/combat/specials/)
+    type: 'projectile', // 'projectile' | 'dash' | 'explosion' | 'multihit' | 'shotgun' (ver src/combat/specials/)
     damage: 18,
     cooldown: 7, // segundos que tarda en recargarse
     // Parámetros propios de cada tipo (ver docs/claude/personajes.md)

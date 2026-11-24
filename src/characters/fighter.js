@@ -43,6 +43,11 @@ export class Fighter {
     return this.cfg.stats.health;
   }
 
+  /** Aspecto actual: el suyo o el de una transformación en curso (a.s.form). */
+  get look() {
+    return this.action?.s?.form || this.cfg;
+  }
+
   get canAct() {
     return !this.action && this.state === 'idle';
   }

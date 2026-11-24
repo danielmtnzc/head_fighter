@@ -8,10 +8,12 @@ Al activarse, `Match.onSpecialStart` hace la pausa dramática: congela, oscurece
 
 ## Tipos
 
-- **`projectile`** — lanza algo que viaja por la arena. `params`: `startup`, `recovery`, `speed`, `radius`, y opcionales `gravity`, `vy` (tiro en arco), `life`, `spawnX`, `spawnY`, `recoil`, `sprite` (ruta de imagen para lanzar un objeto en vez de la bola de energía), `spin`.
-- **`dash`** — carga y embiste en línea recta. `params`: `startup`, `speed`, `duration`, `recovery`. `fx.trail: 'bolt'` añade rayos a la estela.
+- **`projectile`** — lanza algo que viaja por la arena. `params`: `startup`, `recovery`, `speed`, `radius`, y opcionales `gravity`, `vy` (tiro en arco), `life`, `spawnX`, `spawnY`, `recoil`, `sprite` (ruta de imagen para lanzar un objeto en vez de la bola de energía), `spin`, `item` (objeto dibujado de `specials/items.js`, p. ej. `bottle`: sale en la mano al cargar y se rompe en trozos), `windPose`.
+- **`dash`** — carga y embiste en línea recta. `params`: `startup`, `speed`, `duration`, `recovery`. `run: true` va corriendo por el suelo y remata con un cabezazo. `form: { head, body }` transforma al personaje durante el especial (`a.s.form`, que el dibujo lee con `f.look`; cabeza `type: 'armor'` = yelmo; `body.steelKnee` = rodilla de acero). `poses: { charge, go, hit }` cambia las poses y `reach` el alcance. `fx.trail: 'bolt'` añade rayos a la estela.
 - **`explosion`** — salta, cae en picado y revienta el suelo: explosión cercana y ondas sísmicas a ambos lados que se pueden saltar. `params`: `leap`, `blastRadius`, `waveSpeed`, `waveRange`, `waveDamage` (fracción del daño), `recovery`, `advance`, `waves: false` para quitar las ondas.
 - **`multihit`** — ráfaga de golpes rápidos y remate. `params`: `startup`, `hits`, `interval`, `finisher` (fracción del daño que va al remate), `recovery`, `advance`. Los golpes de la ráfaga llevan `invuln: 0` para encadenar.
+- **`shotgun`** — saca una escopeta de feria, apunta y dispara un tapón rápido y recto (se puede saltar). `params`: `startup`, `recovery`, `speed`, `radius`, `muzzleX`, `muzzleY`, `recoil`.
+- **`spray`** — suelta por la boca un chorro que golpea una vez. `params`: `startup`, `duration`, `recovery`, `reach`, `mouthX`, `mouthY`, `sickSkin` (color de piel mientras dura).
 
 ## Crear un tipo nuevo
 
@@ -22,6 +24,7 @@ export default {
   start(f, sp, world, a) {},            // al empezar
   update(f, sp, world, dt, a) {},       // cada paso; devuelve true al terminar
   pose(f, a, sp) { return 'castWind'; },// nombre de pose de characters/poses.js
+  prop(ctx, f, a, sp) {},               // opcional: dibuja un objeto en la mano delantera
   cancel(f, a) {},                      // opcional: si le golpean a mitad
 };
 ```

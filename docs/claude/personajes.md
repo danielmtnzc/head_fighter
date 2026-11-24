@@ -4,6 +4,8 @@ Cada personaje es un objeto de configuración en `src/characters/defs/<id>.js`. 
 
 ## Añadir un amigo
 
+El proceso habitual (caricatura a partir de la foto) está en docs/claude/monigotes.md. Alternativa con foto recortada:
+
 1. Guardar su foto en `assets/heads/` (PNG o WebP, recortada a la cara, mejor cuadrada y con fondo transparente).
 2. Copiar `src/characters/defs/_plantilla.js` con otro nombre y rellenarlo.
 3. Importarlo en `src/characters/roster.js` y añadirlo a `ROSTER`. Aparece solo en la selección, el HUD y la presentación VS.
@@ -11,19 +13,27 @@ Cada personaje es un objeto de configuración en `src/characters/defs/<id>.js`. 
 ## Campos
 
 - `id`, `name`, `tagline`, `color` (color principal para interfaz y efectos).
+- `groups`: grupos a los que pertenece, uno o ambos: `['lps']`, `['quinta']`, `['lps', 'quinta']`. Sin el campo, aparece en todos. Se definen en `src/characters/groups.js` (nombre y color).
 - `head`:
   - foto: `{ type: 'image', src, shape: 'oval'|'circle', size, zoom, offsetX, offsetY, mirror }`. Se recorta en óvalo con ajuste "cover" (mantiene proporciones). `offsetX/Y` van en radios de cabeza. `mirror: false` evita voltear la foto al mirar a la izquierda. Si la imagen falla o aún carga, se usa `head.art`.
-  - dibujada: `{ type: 'drawn', size, art }` con `art = { skin, hair, hairColor, hairColor2, brows, eye, wide, extra: [...], extraColor, beardColor, mustacheColor }`. `hair`: `short`, `spikes`, `flame`, `pigtails`, `bald`. `extra`: `headband`, `beard`, `mustache`, `glasses`, `lashes`, `cheeks`, `freckles`, `thickBrows`.
+  - dibujada: `{ type: 'drawn', size, art }` con `art = { skin, hair, hairColor, hairColor2, brows, eye, wide, extra: [...], extraColor, beardColor, mustacheColor }`. `hair`: `short`, `spikes`, `flame`, `pigtails`, `bald`, `quiff` (tupé con sienes degradadas), `crop` (corto con sienes degradadas), `fringe` (texturizado con flequillo), `curtain` (media melena corta con raya), `buzz` (rapado). `extra`: `headband`, `beard`, `mustache`, `glasses`, `lashes`, `cheeks`, `freckles`, `thickBrows`, `earring`, `dimples`, `stubble` (barba de pocos días), `goatee` (`goateeColor`), `thinMustache`, `mole`, `lids` (párpados caídos). Para caricaturas: `face: 'long'` (cara alargada), `nose: 'long'`, `smile: 'teeth'`, `brow: 'soft'`, `eyeSize`.
   - Las cabezas dibujadas cambian de expresión (`idle`, `attack`, `hurt`, `ko`, `win`); las fotos no, pero sí se inclinan, parpadean en blanco al recibir y llevan estrellitas en el K.O.
-- `body`: `{ shirt, shorts, skin, gloves, shoes, detail, detailColor, scale, width }`. `detail`: `stripe`, `bolt`, `star`, `flame`, `heart`.
+- `body`: `{ shirt, shorts, skin, gloves, shoes, detail, detailColor, scale, width, legs }`. `detail`: `stripe`, `bolt`, `star`, `flame`, `heart`, `beca` (camisa, corbata y beca de graduación o solapas de traje; `tieColor` = corbata), `cross` (americana abierta con colgante de cruz), `straps` (jersey y tirantes de mochila). `legs` alarga las piernas sin agrandar la cabeza (la caja de colisión no cambia).
 - `stats`: `{ health, speed, jump, power, weight }`. `health` en puntos (150 es lo normal); el resto son multiplicadores (1 = normal). `power` escala el daño de puñetazo y patada, no el del especial. `weight` reduce el retroceso recibido.
 - `special`: `{ name, description, type, damage, cooldown, params, fx, ai }`. Ver docs/claude/especiales.md.
 
-## Personajes actuales (ficticios, de prueba)
+## Personajes actuales
 
-| id | Estilo | Especial (tipo) |
-|---|---|---|
-| rayo | rápido, equilibrado | Trueno Exprés (`dash`) |
-| brasas | pegador a distancia | Bola de Brasa (`projectile`) |
-| tanque | lento, pesado, resistente | Terremoto (`explosion`) |
-| chispa | veloz, salta mucho | Metralleta de Tortas (`multihit`) |
+Los amigos se hacen como caricatura dibujada a partir de su foto (`type: 'drawn'`), no con la foto recortada. `nani` (Ñañi), `kalong` (KalonG), `jd` (JD), `pipo` (Pipo) y `minimocho` (MiniMocho) son amigos reales; los demás son ficticios, de prueba, y su grupo es provisional.
+
+| id | Estilo | Especial (tipo) | Grupos |
+|---|---|---|---|
+| rayo | rápido, equilibrado | Trueno Exprés (`dash`) | lps |
+| brasas | pegador a distancia | Bola de Brasa (`projectile`) | lps |
+| tanque | lento, pesado, resistente | Terremoto (`explosion`) | quinta |
+| chispa | veloz, salta mucho | Metralleta de Tortas (`multihit`) | quinta |
+| nani | alto, equilibrado, a distancia | Disparo de escopeta de feria (`shotgun`) | lps y quinta |
+| kalong | pegador, media distancia | Chupito de Jager (`projectile` con `item`) | lps |
+| jd | bajito, rápido y ligero | Cabezazo de Mini Peka (`dash` con `run` y `form`) | lps y quinta |
+| pipo | equilibrado, cuerpo a cuerpo | Rodilla de acero (`dash` con `poses` y `form.body.steelKnee`) | lps |
+| minimocho | algo bajo, ligero, media distancia | Pota de ucraniana (`spray`) | lps |

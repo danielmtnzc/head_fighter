@@ -165,6 +165,19 @@ export class Effects {
           ctx.globalAlpha = 1;
           break;
         }
+        case 'drop': {
+          // gota opaca con contorno
+          ctx.globalAlpha = Math.min(1, k * 3);
+          ctx.fillStyle = p.color;
+          ctx.strokeStyle = OUTLINE;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * (0.6 + k * 0.4), 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+          break;
+        }
         case 'glow': {
           ctx.globalCompositeOperation = 'lighter';
           ctx.globalAlpha = k;

@@ -3,7 +3,7 @@
 ## Pantallas (DOM en `index.html`, estilos en `css/style.css`)
 
 - `#screen-title`: logotipo y JUGAR, con un combate de demostración IA contra IA de fondo.
-- `#screen-select`: modo (1 jugador vs CPU / 2 jugadores), dificultad de la CPU y luchador de cada lado. La construye `src/ui/select.js` a partir de `ROSTER`.
+- `#screen-select`: modo (1 jugador vs CPU / 2 jugadores), dificultad de la CPU y luchador de cada lado. La construye `src/ui/select.js` a partir de `ROSTER`. En cada lado, las pestañas de grupo (LPS / La Quinta del Buitre) filtran los luchadores visibles sin cambiar el elegido; las insignias muestran los grupos del personaje (también en VS).
 - `#screen-vs`: presentación de los dos personajes (2,1 s) antes de la cuenta atrás.
 - `#screen-result`: ganador, revancha, cambiar luchadores, menú.
 - `#screen-pause`: tecla Esc o botón del HUD; también al ocultar la pestaña.
