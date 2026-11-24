@@ -42,7 +42,7 @@ export class SelectScreen {
     el.innerHTML = `
       <div class="sel-head"><h3></h3><div class="groups"></div></div>
       <div class="sel-main">
-        <div class="pv"><canvas class="preview" width="252" height="288"></canvas><div class="badges"></div></div>
+        <div class="pv"><canvas class="preview" width="504" height="576"></canvas><div class="badges"></div></div>
         <div class="info">
           <div class="nm"></div><div class="tag"></div>
           <div class="stats">${STATS.map(([l]) => `<div class="stat"><span>${l}</span><i><b></b></i></div>`).join('')}</div>
@@ -55,7 +55,7 @@ export class SelectScreen {
       const b = document.createElement('button');
       b.className = 'pick';
       b.style.setProperty('--pc', cfg.color);
-      b.innerHTML = '<canvas width="96" height="96"></canvas>';
+      b.innerHTML = '<canvas width="192" height="192"></canvas>';
       b.addEventListener('click', () => {
         this.picks[side] = i;
         sfx.select();
@@ -89,7 +89,7 @@ export class SelectScreen {
     const s = this.sides[side];
     const cfg = this.roster[this.picks[side]];
     s.el.style.setProperty('--c', cfg.color);
-    s.el.querySelector('h3').textContent = side === 0 ? 'JUGADOR 1' : this.mode === 'cpu' ? 'RIVAL (CPU)' : 'JUGADOR 2';
+    s.el.querySelector('h3').textContent = side === 0 ? 'TÚ' : this.mode === 'cpu' ? 'RIVAL' : 'JUGADOR 2';
     s.el.querySelector('.nm').textContent = cfg.name;
     s.el.querySelector('.badges').innerHTML = groupBadges(cfg);
     s.el.querySelector('.tag').textContent = cfg.tagline || '';
@@ -114,11 +114,12 @@ export class SelectScreen {
       f.animT += dt;
       f.animate(dt);
       const c = s.ctx;
+      c.setTransform(2, 0, 0, 2, 0, 0); // el lienzo tiene el doble de resolución
       c.clearRect(0, 0, 252, 288);
       drawFighterPreview(c, f, 126, 270, 1.6);
       s.buttons.forEach((b, i) => {
         const pc = b.firstChild.getContext('2d');
-        pc.setTransform(1, 0, 0, 1, 0, 0);
+        pc.setTransform(2, 0, 0, 2, 0, 0);
         pc.clearRect(0, 0, 96, 96);
         pc.translate(46, 54);
         drawHead(pc, this.roster[i], 30, i === this.picks[this.sides.indexOf(s)] ? 'win' : 'idle', f.animT, 1);

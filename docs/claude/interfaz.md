@@ -3,13 +3,13 @@
 ## Pantallas (DOM en `index.html`, estilos en `css/style.css`)
 
 - `#screen-title`: logotipo y JUGAR, con un combate de demostración IA contra IA de fondo.
-- `#screen-select`: modo (1 jugador vs CPU / 2 jugadores), dificultad de la CPU y luchador de cada lado. La construye `src/ui/select.js` a partir de `ROSTER`. En cada lado, las pestañas de grupo (LPS / La Quinta del Buitre) filtran los luchadores visibles sin cambiar el elegido; las insignias muestran los grupos del personaje (también en VS).
+- `#screen-select`: dificultad de la CPU y luchador de cada lado. Ocupa toda la pantalla (tarjetas a todo el ancho, botones de 4,4–5 rem para el dedo). El selector de modo (`.modes`, 2 jugadores) está oculto con `hidden` hasta que haya juego online; su código sigue ahí. La construye `src/ui/select.js` a partir de `ROSTER`. En cada lado, las pestañas de grupo (LPS / La Quinta del Buitre) filtran los luchadores visibles sin cambiar el elegido; las insignias muestran los grupos del personaje (también en VS).
 - `#screen-vs`: presentación de los dos personajes (2,1 s) antes de la cuenta atrás.
 - `#screen-result`: ganador, revancha, cambiar luchadores, menú.
 - `#screen-pause`: tecla Esc o botón del HUD; también al ocultar la pestaña.
 - `#rotate`: aviso de girar el móvil (solo táctil en vertical).
 
-Todo se mide en `rem`; `1rem = min(2.6vh, 1.5vw)`, así escala con cualquier pantalla horizontal.
+Todo se mide en `rem`; `1rem = min(2.6dvh, 1.5vw)`, así escala con cualquier pantalla horizontal: siempre hay al menos 38,4 rem de alto y 66,6 rem de ancho. Se diseña para el móvil en horizontal (1rem ≈ 9–10 px): los botones de menú no bajan de unos 4,4 rem de alto.
 
 ## HUD (`src/ui/hud.js`)
 

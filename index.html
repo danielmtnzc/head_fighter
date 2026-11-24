@@ -79,20 +79,18 @@
 
   <!-- Selección de personaje -->
   <section id="screen-select" class="screen hidden">
-    <h2>ELIGE LUCHADOR</h2>
-    <div class="modes">
+    <!-- Oculto hasta que haya juego online: 2 jugadores en un móvil no tiene sentido -->
+    <div class="modes hidden">
       <button data-mode="cpu" class="on">1 JUGADOR vs CPU</button>
       <button data-mode="2p">2 JUGADORES</button>
     </div>
     <div class="sel-row">
       <div class="sel-side" data-side="0"></div>
-      <div class="vs-mini">VS</div>
       <div class="sel-side" data-side="1"></div>
     </div>
     <div class="sel-actions">
       <button id="btn-back" class="btn-small">◀ VOLVER</button>
       <div class="diff">
-        <span>CPU</span>
         <button data-level="0">FÁCIL</button><button data-level="1" class="on">NORMAL</button><button data-level="2">DIFÍCIL</button>
       </div>
       <button id="btn-fight" class="btn-big">¡A PELEAR!</button>
