@@ -1,4 +1,4 @@
-// MINIMOCHO — algo bajo y ligero. Caricatura dibujada. Especial: chorro de vómito verde.
+// MINIMOCHO — ligero, de media distancia. Caricatura dibujada. Especial: chorro de vómito verde.
 export default {
   id: 'minimocho',
   name: 'MiniMocho',
@@ -15,7 +15,7 @@ export default {
   },
   body: {
     shirt: '#f4f6f8', shorts: '#3a4250', skin: '#efc3a0', gloves: '#efc3a0', shoes: '#9bc53d',
-    detail: null, scale: 0.95, width: 0.95, legs: 0.9,
+    detail: null, scale: 1, width: 0.95, legs: 1,
   },
   stats: { health: 150, speed: 1.06, jump: 1.03, power: 1, weight: 0.96 },
   special: {
@@ -24,7 +24,7 @@ export default {
     type: 'spray',
     damage: 22,
     cooldown: 8,
-    params: { startup: 0.42, duration: 0.5, recovery: 0.35, reach: 290, mouthX: 14, mouthY: -46, sickSkin: '#a9c77a' },
+    params: { startup: 0.42, duration: 0.5, recovery: 0.35, reach: 290, mouthX: 15, mouthY: -50, sickSkin: '#a9c77a' },
     fx: { color: '#9bc53d', color2: '#d6e86a', text: '¡POTA DE UCRANIANA!' },
     ai: { min: 60, max: 280 },
   },

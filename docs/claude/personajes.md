@@ -35,5 +35,5 @@ Los amigos se hacen como caricatura dibujada a partir de su foto (`type: 'drawn'
 | nani | alto, equilibrado, a distancia | Disparo de escopeta de feria (`shotgun`) | lps y quinta |
 | kalong | pegador, media distancia | Chupito de Jager (`projectile` con `item`) | lps |
 | jd | bajito, rápido y ligero | Cabezazo de Mini Peka (`dash` con `run` y `form`) | lps y quinta |
-| pipo | equilibrado, cuerpo a cuerpo | Rodilla de acero (`dash` con `poses` y `form.body.steelKnee`) | lps |
-| minimocho | algo bajo, ligero, media distancia | Pota de ucraniana (`spray`) | lps |
+| pipo | alto, equilibrado, cuerpo a cuerpo | Rodilla de acero (`dash` con `poses` y `form.body.steelKnee`) | lps |
+| minimocho | ligero, media distancia | Pota de ucraniana (`spray`) | lps |

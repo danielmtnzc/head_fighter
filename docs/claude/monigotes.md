@@ -12,13 +12,13 @@ Proceso para convertir la foto de un amigo en personaje. Los campos técnicos es
 | Nombre o apodo | Preguntar |
 | Grupo: LPS, La Quinta del Buitre o ambos | Preguntar |
 | Superataque: nombre, qué saca o en qué se convierte, cómo golpea | Preguntar |
-| Estatura: bajo, normal, alto | Normal |
+| Altura: pequeño, medio, alto o súper alto | Preguntar (ver «Alturas») |
 | Frase corta | Inventarla según el superataque y avisar |
 | Texto al impactar | Inventarlo (¡PREMIO!, ¡CHUPITO!, ¡CABEZAZO!) y avisar |
 | Ropa | La de la foto |
 | Color | Elegir uno distinto de los ya usados |
 
-Preguntar todo lo que falte en un solo mensaje. No deducir estatura ni carácter de la foto. Si solo faltan nombre o grupo, se puede avanzar con valores provisionales y preguntar al final.
+Preguntar todo lo que falte en un solo mensaje. No deducir altura ni carácter de la foto. Si solo faltan nombre o grupo, se puede avanzar con valores provisionales y preguntar al final.
 
 ## 2. Leer la foto
 
@@ -34,11 +34,11 @@ Si la foto es pequeña o no se distingue un rasgo, no inventarlo; pedir otra si 
 
 ## 3. Dibujar
 
-- Siempre caricatura (`type: 'drawn'`), nunca la foto recortada. No guardar la foto en el proyecto.
+- Siempre caricatura (`type: 'drawn'`), nunca la foto recortada. La foto original no se guarda en el proyecto ni se sube al repositorio (`.gitignore` las bloquea en `assets/heads/`); cuando el personaje esté terminado, borrar las copias locales, confirmando antes con el usuario cuáles.
 - Reutilizar primero lo que hay en `art`. Si un rasgo no existe, añadirlo a `src/characters/heads.js` como opción reutilizable, sin cambiar a los demás.
-- El pelo es lo que más distingue: evitar que dos amigos compartan peinado idéntico. Usados: `quiff` (Ñañi), `crop` (KalonG), `fringe` (JD), `curtain` (Pipo), `buzz` (MiniMocho). JD debe seguir siendo el más bajo.
+- El pelo es lo que más distingue: evitar que dos amigos compartan peinado idéntico. Usados: `quiff` (Ñañi), `crop` (KalonG), `fringe` (JD), `curtain` (Pipo), `buzz` (MiniMocho).
 - Coordenadas en radios de cabeza, mirando a la derecha en tres cuartos: una sola oreja, la de la izquierda.
-- Estatura: `body.legs` alarga o acorta piernas y `body.scale` agranda todo. Alto: `legs 1.45, scale 1.04`. Bajo: `legs 0.8, scale 0.9`.
+- Altura: `body.legs` alarga o acorta piernas y `body.scale` agranda todo; valores en «Alturas».
 - `head.size` cerca de 1; si el pelo sube mucho, comprobar que no se corta en los retratos.
 - Piel: cogerla algo más clara que en la foto, porque el sombreado la oscurece.
 
@@ -48,6 +48,20 @@ Fallos ya vistos:
 - Un pendiente con cruz pequeña parece el símbolo ♀: simplificar los detalles diminutos.
 - La frase debe caber en una línea (unos 30 caracteres).
 - Los textos de impacto de más de 11 letras se encogen solos; mejor que sean cortos.
+
+
+## Alturas
+
+Todo personaje es de uno de estos cuatro tipos. La altura en unidades es `(88 + 40 × head.size + (legs − 1) × 21) × scale`, sin contar el pelo.
+
+| Tipo | Altura | Valores de partida (`body`) | Personajes |
+|---|---|---|---|
+| Pequeño | menos de 122 | `scale 0.92, legs 0.85` | JD (113), Chispa (120) |
+| Medio | 122–136 | `scale 1, legs 1` | Rayo (128), KalonG (128), MiniMocho (129), Brasas (131) |
+| Alto | 137–148 | `scale 1.04, legs 1.45` | Ñañi (143), Pipo (143), Tanque (143) |
+| Súper alto | más de 148 | `scale 1.08, legs 1.9` (159; sin probar: revisar retratos y selección) | ninguno todavía |
+
+JD debe seguir siendo el más bajo. La caja de colisión es igual para todos: la altura es solo visual. Al crear un personaje o cambiarle la altura, actualizar esta tabla.
 
 ## 4. Superataque
 
@@ -68,6 +82,7 @@ Al terminar, decir al usuario qué se ha inventado (frase, textos, color) para q
 ## Preferencias del usuario
 
 - Caricatura adaptada al juego, no recortar la cara.
+- Las fotos originales nunca se suben y se borran una vez creado el personaje.
 - Frase de presentación relacionada con el superataque.
 - Si dice qué texto «pondrá» el superataque, va tal cual al impactar (p. ej. ¡RODILLA DE ACERO!).
 - Cada personaje puede estar en LPS, en La Quinta del Buitre o en ambos.
