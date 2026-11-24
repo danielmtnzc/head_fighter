@@ -1,4 +1,4 @@
-# La Quinta del Buitre
+# Head Fighter
 
 Juego web 2D de peleas uno contra uno: estética de cabezones (cabeza enorme, cuerpo pequeño) y mecánicas de lucha arcade. Los personajes serán los amigos del autor, con su foto como cabeza y un golpe especial propio. HTML5 Canvas + JavaScript en módulos ES, sin dependencias, sin build y sin backend.
 
