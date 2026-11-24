@@ -8,7 +8,7 @@
   --cyan: #7df9ff;
   --font: 'Bangers', Impact, 'Arial Black', sans-serif;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; touch-action: none; /* no se hereda: hay que ponerlo en cada elemento */ }
 html, body {
   width: 100%; height: 100%; overflow: hidden; background: #160a35; color: #fff;
   font-family: var(--font); letter-spacing: .04em;

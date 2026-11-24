@@ -7,6 +7,7 @@ import { Match } from './engine/match.js';
 import { initAudio, sfx, setMuted, isMuted } from './engine/audio.js';
 import { KeyboardController, MergedController, SCHEMES, clearPressed } from './input/keyboard.js';
 import { TouchControls } from './input/touch.js';
+import { blockZoom } from './input/noZoom.js';
 import { AIController } from './ai/ai.js';
 import { Hud } from './ui/hud.js';
 import { SelectScreen } from './ui/select.js';
@@ -29,6 +30,7 @@ let paused = false;
 let choice = null;
 let flowToken = 0; // invalida temporizadores de un combate anterior
 
+blockZoom();
 preloadHeads(ROSTER);
 
 // ------------------------------------------------------------ pantalla
@@ -220,6 +222,8 @@ click('btn-mute', () => {
   setMuted(!isMuted());
   $('btn-mute').classList.toggle('off', isMuted());
 });
+// iPhone no permite pantalla completa en páginas web: se oculta el botón
+$('btn-full').classList.toggle('hidden', !document.documentElement.requestFullscreen);
 click('btn-full', async () => {
   try {
     if (document.fullscreenElement) await document.exitFullscreen();

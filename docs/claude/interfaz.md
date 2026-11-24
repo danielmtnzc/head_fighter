@@ -26,3 +26,5 @@ Táctil (`src/input/touch.js`, Pointer Events, un `pointerId` por dedo): joystic
 ## Escenario (`src/stages/azotea.js`)
 
 Un escenario exporta `drawBackground(ctx, view, cam, t)` (espacio de pantalla, capas con paralaje) y `drawFloor(ctx)` (espacio de mundo). Es procedural. Para añadir otro, crear un archivo con la misma interfaz y pasarlo a `Match` en `main.js`. Los límites de la arena están en `STAGE` (`config.js`).
+
+Zoom en iOS (`src/input/noZoom.js`): Safari ignora `user-scalable=no`, así que se cancelan los toques fuera de los botones de menú, el segundo toque rápido sobre ellos (lanzando el `click` a mano) y el pellizco. Un elemento nuevo que dependa de `click` debe ser un `<button>`.
