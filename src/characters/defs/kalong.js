@@ -15,7 +15,7 @@ export default {
   },
   body: {
     shirt: '#26365c', shorts: '#26365c', skin: '#f0c19b', gloves: '#f0c19b', shoes: '#33211a',
-    detail: 'beca', detailColor: '#1a2644', tieColor: '#2f4f93', scale: 1, width: 1.05,
+    detail: 'beca', detailColor: '#1a2644', tieColor: '#2f4f93', scale: 1, build: 'medioRelleno',
   },
   stats: { health: 150, speed: 1, jump: 1, power: 1, weight: 1 },
   special: {

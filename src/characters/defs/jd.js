@@ -15,7 +15,7 @@ export default {
   },
   body: {
     shirt: '#1f2f52', shorts: '#1f2f52', skin: '#f3c9a8', gloves: '#f3c9a8', shoes: '#2d2320',
-    detail: 'cross', detailColor: '#dfe6ee', scale: 0.9, width: 1, legs: 0.8,
+    detail: 'cross', detailColor: '#dfe6ee', scale: 0.9, build: 'medioFuerte', legs: 0.8,
   },
   stats: { health: 150, speed: 1.1, jump: 1.06, power: 1, weight: 0.94 },
   special: {
@@ -28,7 +28,7 @@ export default {
       startup: 0.5, speed: 820, duration: 0.65, recovery: 0.4, run: true,
       form: {
         head: { type: 'armor', size: 1 },
-        body: { shirt: '#5a6478', shorts: '#3b4252', skin: '#7d8799', gloves: '#b87333', shoes: '#2b303c', detail: 'bolt', detailColor: '#8dff6a', width: 1.2 },
+        body: { shirt: '#5a6478', shorts: '#3b4252', skin: '#7d8799', gloves: '#b87333', shoes: '#2b303c', detail: 'bolt', detailColor: '#8dff6a', build: 'normal', width: 1.2 },
       },
     },
     fx: { color: '#8b5cf6', color2: '#8dff6a', text: '¡CABEZAZO!' },

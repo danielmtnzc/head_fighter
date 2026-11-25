@@ -2,6 +2,7 @@
 // La cabeza se delega en heads.js, así puede ser un dibujo o una fotografía.
 import { OUTLINE } from '../config.js';
 import { drawHead } from './heads.js';
+import { buildOf } from './builds.js';
 
 // Esqueleto base (unidades lógicas, origen en los pies, mirando a +x)
 const SK = {
@@ -10,6 +11,9 @@ const SK = {
   upper: 13, fore: 12, thigh: 11, shin: 10,
   head: [3, -88], headR: 40,
 };
+
+/** Desplaza un hombro o cadera hacia fuera según la complexión. */
+const spread = (pt, d) => [pt[0] + Math.sign(pt[0]) * d, pt[1]];
 
 function limb(o, a1, a2, l1, l2, st) {
   const jx = o[0] + Math.sin(a1) * l1 * st;
@@ -43,8 +47,9 @@ function strokeLimb(ctx, o, pts, w, c1, c2) {
 
 function drawArm(ctx, o, a, st, body) {
   const pts = limb(o, a[0], a[1], SK.upper, SK.fore, st);
-  strokeLimb(ctx, o, pts, 9, body.shirt, body.skin);
-  const r = 9.5 * (1 + (st - 1) * 0.3);
+  const { arm } = buildOf(body);
+  strokeLimb(ctx, o, pts, 9 * arm, body.shirt, body.skin);
+  const r = 9.5 * (1 + (arm - 1) * 0.35) * (1 + (st - 1) * 0.3);
   ctx.beginPath();
   ctx.arc(pts[2], pts[3], r, 0, Math.PI * 2);
   ctx.fillStyle = body.gloves;
@@ -63,7 +68,7 @@ const legExtra = (body) => (body.legs || 1) - 1;
 
 function drawLeg(ctx, o, a, st, body, steel = false) {
   const pts = limb(o, a[0], a[1], SK.thigh, SK.shin, st + legExtra(body));
-  strokeLimb(ctx, o, pts, 10, body.shorts, body.skin);
+  strokeLimb(ctx, o, pts, 10 * buildOf(body).leg, body.shorts, body.skin);
   if (steel) {
     // rodillera de acero, con brillo
     ctx.lineCap = 'round';
@@ -117,23 +122,48 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+/** Contorno de la camiseta: pecho arriba, cintura abajo y barriga hacia delante. */
+function shirtPath(ctx, hw, ww, belly) {
+  const top = -58;
+  const bot = -28 + belly * 0.4;
+  const r = 9;
+  ctx.beginPath();
+  ctx.moveTo(-hw + r, top);
+  ctx.lineTo(hw - r, top);
+  ctx.quadraticCurveTo(hw, top, hw, top + r);
+  if (belly) ctx.bezierCurveTo(hw + belly * 0.4, -48, ww + belly * 1.3, -36, ww, bot - 2);
+  else ctx.lineTo(ww, bot - r);
+  ctx.quadraticCurveTo(ww, bot, ww - r, bot);
+  ctx.lineTo(-ww + r, bot);
+  ctx.quadraticCurveTo(-ww, bot, -ww, bot - (belly ? 4 : r));
+  if (belly) ctx.bezierCurveTo(-ww - belly * 0.5, -38, -hw, -48, -hw, top + r);
+  else ctx.lineTo(-hw, top + r);
+  ctx.quadraticCurveTo(-hw, top, -hw + r, top);
+  ctx.closePath();
+}
+
 function drawTorso(ctx, body) {
-  const hw = 18 * (body.width || 1);
+  const b = buildOf(body);
+  const w = 18 * (body.width || 1);
+  const hw = w * b.chest; // pecho
+  const ww = w * b.waist; // cintura
+  const full = Math.max(hw, ww) + b.belly; // anchura que cubre todo el torso
   ctx.lineWidth = 3;
   ctx.strokeStyle = OUTLINE;
-  roundRect(ctx, -hw, -36, hw * 2, 16, 6);
+  roundRect(ctx, -ww, -36, ww * 2, 16, 6);
   ctx.fillStyle = body.shorts;
   ctx.fill();
   ctx.stroke();
-  roundRect(ctx, -hw - 1, -58, hw * 2 + 2, 30, 9);
+  shirtPath(ctx, hw + 1, ww + 1, b.belly);
   ctx.fillStyle = body.shirt;
   ctx.fill();
-  ctx.stroke();
+  ctx.save();
+  ctx.clip();
   // detalle del pecho
   ctx.fillStyle = body.detailColor || 'rgba(255,255,255,0.85)';
   switch (body.detail) {
     case 'stripe':
-      ctx.fillRect(-hw + 1, -42, hw * 2 - 2, 5);
+      ctx.fillRect(-full, -42, full * 2, 5);
       break;
     case 'bolt':
       ctx.beginPath();
@@ -165,8 +195,8 @@ function drawTorso(ctx, body) {
       ctx.lineWidth = 1.5;
       for (const y of [-52, -47, -42, -37, -32]) {
         ctx.beginPath();
-        ctx.moveTo(-hw + 2, y);
-        ctx.lineTo(hw - 2, y);
+        ctx.moveTo(-full, y);
+        ctx.lineTo(full, y);
         ctx.stroke();
       }
       ctx.fillStyle = body.detailColor;
@@ -192,6 +222,29 @@ function drawTorso(ctx, body) {
       ctx.fillRect(0.2, -43.2, 7.6, 2.4);
       break;
     }
+    case 'blazer': {
+      // americana abierta y camisa blanca con el cuello desabrochado
+      const tri = (c, pts) => {
+        ctx.beginPath();
+        pts.forEach(([x, y]) => ctx.lineTo(x, y));
+        ctx.closePath();
+        ctx.fillStyle = c;
+        ctx.fill();
+      };
+      tri('#f4f7fb', [[-8, -57], [16, -57], [8, -24], [0, -24]]);
+      tri(body.skin, [[-1, -57], [9, -57], [4, -44]]);
+      ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(4, -44);
+      ctx.lineTo(4, -24);
+      ctx.stroke();
+      if (body.detailColor) {
+        tri(body.detailColor, [[-8, -57], [-3, -57], [2, -36], [-2, -40]]);
+        tri(body.detailColor, [[16, -57], [11, -57], [6, -36], [10, -40]]);
+      }
+      break;
+    }
     case 'beca': {
       // camisa, corbata y beca de graduación en V
       const tri = (c, pts) => {
@@ -214,6 +267,11 @@ function drawTorso(ctx, body) {
       ctx.fill();
       break;
   }
+  ctx.restore();
+  shirtPath(ctx, hw + 1, ww + 1, b.belly);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = OUTLINE;
+  ctx.stroke();
 }
 
 /** Dibuja el cuerpo completo en el origen (pies en 0,0). */
@@ -221,11 +279,16 @@ function drawBody(ctx, f) {
   const p = f.pose;
   const body = f.look.body;
   const s = body.scale || 1;
+  const build = buildOf(body);
+  const shoulderF = spread(SK.shoulderF, build.shoulder);
+  const shoulderB = spread(SK.shoulderB, build.shoulder);
+  const hipF = spread(SK.hipF, build.hip);
+  const hipB = spread(SK.hipB, build.hip);
   ctx.save();
   ctx.scale(f.facing * s * p.sx, s * p.sy);
 
-  const legF = limb(SK.hipF, p.lf[0], p.lf[1], SK.thigh, SK.shin, p.lsF + legExtra(body));
-  const legB = limb(SK.hipB, p.lb[0], p.lb[1], SK.thigh, SK.shin, p.lsB + legExtra(body));
+  const legF = limb(hipF, p.lf[0], p.lf[1], SK.thigh, SK.shin, p.lsF + legExtra(body));
+  const legB = limb(hipB, p.lb[0], p.lb[1], SK.thigh, SK.shin, p.lsB + legExtra(body));
   // El pie más bajo se apoya en el suelo (salvo en el aire o tumbado)
   let ground = f.onGround ? 0 : -legExtra(body) * (SK.thigh + SK.shin);
   if (f.onGround) {
@@ -245,11 +308,11 @@ function drawBody(ctx, f) {
 
   ctx.save();
   torso();
-  drawArm(ctx, SK.shoulderB, p.ab, p.asB, body);
+  drawArm(ctx, shoulderB, p.ab, p.asB, body);
   ctx.restore();
 
-  drawLeg(ctx, SK.hipB, p.lb, p.lsB, body);
-  drawLeg(ctx, SK.hipF, p.lf, p.lsF, body, body.steelKnee);
+  drawLeg(ctx, hipB, p.lb, p.lsB, body);
+  drawLeg(ctx, hipF, p.lf, p.lsF, body, body.steelKnee);
 
   ctx.save();
   torso();
@@ -261,14 +324,14 @@ function drawBody(ctx, f) {
   ctx.restore();
   const a = f.action;
   if (a?.handler?.prop) {
-    const hand = limb(SK.shoulderF, p.af[0], p.af[1], SK.upper, SK.fore, p.asF);
+    const hand = limb(shoulderF, p.af[0], p.af[1], SK.upper, SK.fore, p.asF);
     ctx.save();
     ctx.translate(hand[2], hand[3]);
     ctx.rotate(Math.PI / 2 - p.af[0] - p.af[1]);
     a.handler.prop(ctx, f, a, a.sp);
     ctx.restore();
   }
-  drawArm(ctx, SK.shoulderF, p.af, p.asF, body);
+  drawArm(ctx, shoulderF, p.af, p.asF, body);
   ctx.restore();
 
   ctx.restore();
@@ -304,13 +367,18 @@ export function drawFighter(ctx, f) {
   else drawBody(ctx, f);
   ctx.restore();
 
-  // estrellitas de K.O.
-  if (f.state === 'ko' && f.onGround) {
-    const cx = f.x - f.facing * 66;
+  // estrellitas de K.O. (tumbado) o de mareo (girando sobre la cabeza)
+  const ko = f.state === 'ko' && f.onGround;
+  const dizzy = f.dizzyT > 0 && f.state !== 'ko';
+  if (ko || dizzy) {
+    const b = f.cfg.body;
+    const top = (88 + 40 * (f.cfg.head.size || 1) + ((b.legs || 1) - 1) * 21) * (b.scale || 1);
+    const cx = ko ? f.x - f.facing * 66 : f.x;
+    const cy = ko ? -96 : f.y - top - 22;
     for (let i = 0; i < 3; i++) {
-      const a = f.animT * 4 + (i * Math.PI * 2) / 3;
+      const a = f.animT * (ko ? 4 : 6) + (i * Math.PI * 2) / 3;
       const x = cx + Math.cos(a) * 30;
-      const y = -96 + Math.sin(a) * 8;
+      const y = cy + Math.sin(a) * 8;
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(a);

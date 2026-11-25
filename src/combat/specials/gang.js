@@ -52,7 +52,7 @@ class Runner {
 
     if (!this.hit) {
       const { finisher = 0.4, crew } = this.sp.params;
-      const box = { x: this.dir > 0 ? this.x - 10 : this.x - 50, y: -72, w: 60, h: 72 };
+      const box = { x: this.dir > 0 ? this.x - 10 : this.x - 50, y: -60, w: 60, h: 60 }; // bajita: se salta
       const spec = this.last
         ? specialHit(this.sp, { dir: this.dir, damage: this.sp.damage * finisher, knockback: { x: 620, y: -480 } })
         : specialHit(this.sp, {

@@ -18,5 +18,7 @@ import multihit from './multihit.js';
 import shotgun from './shotgun.js';
 import spray from './spray.js';
 import gang from './gang.js';
+import skyDrop from './skyDrop.js';
+import cards from './cards.js';
 
-export const SPECIALS = { projectile, dash, explosion, multihit, shotgun, spray, gang };
+export const SPECIALS = { projectile, dash, explosion, multihit, shotgun, spray, gang, skyDrop, cards };

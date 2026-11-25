@@ -262,7 +262,7 @@ function drawDrawnHead(ctx, r, art, expr, t) {
     ctx.ellipse(r * 0.26, r * 0.8, r * 0.95, r * 0.58, 0, 0, Math.PI * 2);
     ctx.fill();
   }
-  if (art.hair === 'quiff' || art.hair === 'crop' || art.hair === 'fringe' || art.hair === 'bangs' || art.hair === 'buzz') {
+  if (art.hair === 'quiff' || art.hair === 'crop' || art.hair === 'fringe' || art.hair === 'bangs' || art.hair === 'buzz' || art.hair === 'pomp' || art.hair === 'shaved') {
     // degradado rapado de las sienes
     const g = ctx.createLinearGradient(0, -r * 0.65, 0, r * 0.12);
     g.addColorStop(0, hairC);
@@ -459,6 +459,24 @@ function drawDrawnHead(ctx, r, art, expr, t) {
       ctx.ellipse(r * 0.1, -r * 0.84, r * 0.42, r * 0.09, 0.03, 0, Math.PI * 2);
       ctx.fill();
       break;
+    case 'shaved': {
+      // rapado al cero, con entradas marcadas: la línea del pelo hace una «M» sobre la frente
+      ctx.beginPath();
+      poly(ctx, r, [[-0.86, -0.32]]);
+      ctx.bezierCurveTo(-r * 0.96, -r * 1.2, r * 0.98, -r * 1.24, r * 0.9, -r * 0.56);
+      poly(ctx, r, [[0.74, -0.66], [0.5, -0.8], [0.34, -0.7], [0.12, -0.78], [-0.14, -0.66], [-0.42, -0.58], [-0.54, -0.3]]);
+      ctx.quadraticCurveTo(-r * 0.7, -r * 0.3, -r * 0.86, -r * 0.32);
+      ctx.closePath();
+      fillStroke(ctx, hairC);
+      // puntitos del pelo recién rapado
+      ctx.fillStyle = 'rgba(255,255,255,0.14)';
+      for (const [x, y] of [[-0.5, -0.9], [-0.2, -1.0], [0.12, -1.02], [0.44, -0.96], [-0.34, -0.72], [0.26, -0.88], [-0.66, -0.6]]) {
+        ctx.beginPath();
+        ctx.arc(x * r, y * r, r * 0.035, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      break;
+    }
     case 'crop': {
       // pelo corto y tupido, algo levantado por delante
       ctx.beginPath();
@@ -475,6 +493,33 @@ function drawDrawnHead(ctx, r, art, expr, t) {
         ctx.beginPath();
         ctx.moveTo(x * r, y * r);
         ctx.lineTo((x + 0.1) * r, (y - 0.14) * r);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = lw;
+      break;
+    }
+    case 'pomp': {
+      // tupé redondo y compacto peinado hacia atrás, con los lados rapados
+      ctx.beginPath();
+      poly(ctx, r, [[-0.84, -0.42]]);
+      for (const [cx, cy, x, y] of [
+        [-1.04, -0.9, -0.74, -1.12], [-0.4, -1.36, 0.06, -1.4], [0.52, -1.48, 0.82, -1.22], [1.06, -1.0, 0.9, -0.6],
+      ]) ctx.quadraticCurveTo(cx * r, cy * r, x * r, y * r);
+      poly(ctx, r, [[0.82, -0.62], [0.6, -0.68], [0.36, -0.64], [0.1, -0.68], [-0.16, -0.62], [-0.4, -0.56], [-0.5, -0.32]]);
+      ctx.quadraticCurveTo(-r * 0.7, -r * 0.46, -r * 0.84, -r * 0.42);
+      ctx.closePath();
+      fillStroke(ctx, hairC);
+      // mechones peinados hacia atrás desde la frente
+      ctx.strokeStyle = art.hairColor2 || 'rgba(255,255,255,0.25)';
+      ctx.lineWidth = lw * 0.9;
+      for (const [x0, y0, cx, cy, x1, y1] of [
+        [0.78, -0.78, 0.62, -1.22, 0.18, -1.3], [0.5, -0.78, 0.36, -1.12, -0.12, -1.2],
+        [0.2, -0.8, 0.04, -1.06, -0.42, -1.06], [-0.1, -0.76, -0.3, -0.94, -0.66, -0.9],
+      ]) {
+        ctx.beginPath();
+        ctx.moveTo(x0 * r, y0 * r);
+        ctx.quadraticCurveTo(cx * r, cy * r, x1 * r, y1 * r);
         ctx.stroke();
       }
       ctx.strokeStyle = OUTLINE;

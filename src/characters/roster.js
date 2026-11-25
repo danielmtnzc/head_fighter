@@ -10,7 +10,9 @@ import jd from './defs/jd.js';
 import pipo from './defs/pipo.js';
 import minimocho from './defs/minimocho.js';
 import mogailes from './defs/mogailes.js';
+import escu from './defs/escu.js';
+import loison from './defs/loison.js';
 
-export const ROSTER = [rayo, brasas, tanque, chispa, nani, kalong, jd, pipo, minimocho, mogailes];
+export const ROSTER = [rayo, brasas, tanque, chispa, nani, kalong, jd, pipo, minimocho, mogailes, escu, loison];
 
 export const getCharacter = (id) => ROSTER.find((c) => c.id === id) || ROSTER[0];

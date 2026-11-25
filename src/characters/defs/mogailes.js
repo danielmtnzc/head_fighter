@@ -15,7 +15,7 @@ export default {
   },
   body: {
     shirt: '#1d2740', shorts: '#2a2f3a', skin: '#f2c3a2', gloves: '#f2c3a2', shoes: '#e9edf2',
-    detail: 'straps', detailColor: '#0f1218', scale: 0.97, width: 1, legs: 0.95,
+    detail: 'straps', detailColor: '#0f1218', scale: 0.97, build: 'normal', legs: 0.95,
   },
   stats: { health: 150, speed: 1.03, jump: 1.02, power: 1, weight: 0.98 },
   special: {
@@ -25,7 +25,7 @@ export default {
     damage: 22,
     cooldown: 8.5,
     params: {
-      startup: 0.5, recovery: 0.4, speed: 640, gap: 78, behind: 170, finisher: 0.35,
+      startup: 0.5, recovery: 0.4, speed: 760, gap: 26, behind: 170, finisher: 0.35,
       crew: [
         { art: { hair: 'crop', extra: ['thickBrows'] }, body: { shirt: '#d63c3c', detail: 'stripe', detailColor: '#ffffff', scale: 1, legs: 1.2 } },
         { art: { hair: 'quiff', smile: 'teeth', extra: ['thickBrows', 'thinMustache'] }, body: { shirt: '#f4f6f8', detail: null, scale: 0.88 } },

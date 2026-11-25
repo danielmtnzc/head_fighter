@@ -16,7 +16,7 @@ export default {
   },
   body: {
     shirt: '#2f3444', shorts: '#3d4a63', skin: '#f3c8a4', gloves: '#f3c8a4', shoes: '#e9edf2',
-    detail: 'straps', detailColor: '#7d5560', scale: 1.04, width: 1, legs: 1.45,
+    detail: 'straps', detailColor: '#7d5560', scale: 1.04, build: 'medioRelleno', legs: 1.45,
   },
   stats: { health: 150, speed: 1, jump: 1, power: 1, weight: 1 },
   special: {

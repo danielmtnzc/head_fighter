@@ -10,7 +10,7 @@ export default {
     size: 0.98,
     art: { skin: '#ffd9b8', hair: 'pigtails', hairColor: '#ff5d8f', brows: '#b0305c', eye: '#7b2cbf', extraColor: '#ffd23f', extra: ['lashes', 'cheeks', 'freckles'] },
   },
-  body: { shirt: '#c77dff', shorts: '#3c096c', skin: '#ffd9b8', gloves: '#ff5d8f', shoes: '#ff5d8f', detail: 'heart', scale: 0.94, width: 0.92 },
+  body: { shirt: '#c77dff', shorts: '#3c096c', skin: '#ffd9b8', gloves: '#ff5d8f', shoes: '#ff5d8f', detail: 'heart', scale: 0.94, build: 'delgado' },
   stats: { health: 155, speed: 1.3, jump: 1.15, power: 1.05, weight: 1.0 },
   special: {
     name: 'Metralleta de Tortas',

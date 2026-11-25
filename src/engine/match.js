@@ -214,11 +214,13 @@ export class Match {
 
     ctx.save();
     cam.apply(ctx, view);
+    // entidades de fondo (p. ej. un edificio ya caído) por detrás de los luchadores
+    for (const e of this.entities) if (e.behind) e.draw(ctx);
     for (const f of this.fighters) drawShadow(ctx, f);
     // el que ataca se dibuja encima
     const order = this.fighters[0].action && !this.fighters[1].action ? [1, 0] : [0, 1];
     for (const i of order) drawFighter(ctx, this.fighters[i]);
-    for (const e of this.entities) e.draw(ctx);
+    for (const e of this.entities) if (!e.behind) e.draw(ctx);
     this.fx.draw(ctx);
     ctx.restore();
 

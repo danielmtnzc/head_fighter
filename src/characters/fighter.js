@@ -8,6 +8,7 @@ import { sfx } from '../engine/audio.js';
 
 const NEUTRAL = { x: 0, jump: false, punch: false, kick: false, special: false };
 const BUFFER = 0.14; // segundos que se recuerda una pulsación
+const DIZZY_SPEED = 0.7; // velocidad al andar mareado
 
 export class Fighter {
   constructor(cfg, side = 0) {
@@ -32,6 +33,7 @@ export class Fighter {
     this.action = null; // ataque en curso
     this.hurtT = 0;
     this.invulnT = 0;
+    this.dizzyT = 0; // mareado: controles invertidos y más lento
     this.flashT = 0;
     this.animT = Math.random() * 3;
     this.walkPhase = 0;
@@ -56,9 +58,11 @@ export class Fighter {
     this.animT += dt;
     this.invulnT = Math.max(0, this.invulnT - dt);
     this.flashT = Math.max(0, this.flashT - dt);
+    this.dizzyT = Math.max(0, this.dizzyT - dt);
 
     const live = world.phase === 'fight';
-    const inp = live && this.controller && this.state !== 'ko' ? this.controller.poll(this, world) : NEUTRAL;
+    let inp = live && this.controller && this.state !== 'ko' ? this.controller.poll(this, world) : NEUTRAL;
+    if (this.dizzyT > 0) inp = { ...inp, x: -inp.x * DIZZY_SPEED };
     for (const k in this.buf) this.buf[k] = inp[k] ? BUFFER : Math.max(0, this.buf[k] - dt);
     if (live) this.energy = Math.min(100, this.energy + (100 / this.cfg.special.cooldown) * dt);
 
@@ -143,7 +147,9 @@ export class Fighter {
       this.onGround = false;
     }
     this.flashT = 0.1;
+    if (spec.dizzy) this.dizzyT = Math.max(this.dizzyT, spec.dizzy);
     if (this.hp <= 0) {
+      this.dizzyT = 0;
       this.state = 'ko';
       this.vx = dir * 520;
       this.vy = -760;
@@ -169,6 +175,7 @@ export class Fighter {
   expression() {
     if (this.state === 'ko') return 'ko';
     if (this.state === 'hurt' || this.state === 'lose') return 'hurt';
+    if (this.dizzyT > 0 && !this.action) return 'hurt';
     if (this.state === 'win') return 'win';
     if (this.action) return 'attack';
     return 'idle';

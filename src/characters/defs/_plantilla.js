@@ -29,7 +29,7 @@ export default {
     shirt: '#3a86ff', shorts: '#1d3557', skin: '#f2c79b', gloves: '#e63946', shoes: '#ffffff',
     detail: 'star', // 'stripe' | 'bolt' | 'star' | 'flame' | 'heart' | 'beca' | null
     scale: 1, // tamaño global del cuerpo
-    width: 1, // anchura del torso
+    build: 'normal', // complexión: delgado | normal | medioFuerte | fuerte | medioRelleno | pocoGordo | muyGordo
     legs: 1, // longitud de piernas (más = más alto)
   },
 

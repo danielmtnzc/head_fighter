@@ -14,7 +14,17 @@ Al activarse, `Match.onSpecialStart` hace la pausa dramática: congela, oscurece
 - **`multihit`** — ráfaga de golpes rápidos y remate. `params`: `startup`, `hits`, `interval`, `finisher` (fracción del daño que va al remate), `recovery`, `advance`. Los golpes de la ráfaga llevan `invuln: 0` para encadenar.
 - **`shotgun`** — saca una escopeta de feria, apunta y dispara un tapón rápido y recto (se puede saltar). `params`: `startup`, `recovery`, `speed`, `radius`, `muzzleX`, `muzzleY`, `recoil`.
 - **`spray`** — suelta por la boca un chorro que golpea una vez. `params`: `startup`, `duration`, `recovery`, `reach`, `mouthX`, `mouthY`, `sickSkin` (color de piel mientras dura).
-- **`gang`** — silba y una cuadrilla llega corriendo por detrás; cada uno pega una vez y el último remata (se pueden saltar). `params`: `startup`, `recovery`, `speed`, `gap` (separación), `behind` (distancia inicial), `finisher`, `crew` (lista de `{ art, body, size }`: cambios sobre el aspecto del luchador).
+- **`gang`** — silba y una cuadrilla llega corriendo por detrás; cada uno pega una vez y el último remata. Se esquiva saltando: el grupo entero (`(crew-1)·gap + 120` px a `speed`) tiene que pasar en menos de ~0,45 s, que es lo que el salto más bajo (`jump` 0.88) se mantiene por encima de su caja de 60 px de alto; por eso van en piña. `params`: `startup`, `recovery`, `speed`, `gap` (separación), `behind` (distancia inicial), `finisher`, `crew` (lista de `{ art, body, size }`: cambios sobre el aspecto del luchador).
+
+- **`skyDrop`** — grita una frase en un bocadillo y del cielo cae un edificio donde está el rival; una sombra avisa (se puede esquivar). Al caer golpea, se queda un rato por detrás de los luchadores (`behind: true`) y se desvanece. `params`: `startup`, `recovery`, `say` (texto del bocadillo), `fall` (segundos de caída), `width`, `height` (zona de golpe), `stay`, `building` (de `BUILDINGS` en `skyDrop.js`; hay `bar`, con la señora en la puerta), `sign` (letrero).
+
+- **`cards`** — grita una frase (`say`) y lanza en ráfaga cartones cuadrados de colores que giran en línea recta (se pueden saltar). El primero que impacta marea al rival; los demás le atraviesan por la invulnerabilidad. `params`: `startup`, `recovery`, `say`, `count`, `interval`, `speed`, `size`, `spawnX`, `spawnY`, `spread`, `dizzy` (segundos de mareo), `colors`.
+
+**Mareo**: cualquier golpe con `dizzy: segundos` en su `spec` deja al rival mareado (`Fighter.dizzyT`): dirección invertida, anda al 70 %, cara de dolor y estrellitas girando sobre la cabeza. Se puede usar en otros especiales con `params.hit.dizzy`.
+
+El bocadillo de diálogo (`SpeechBubble`) está en `specials/bubble.js` y lo usan `skyDrop` y `cards`.
+
+Las entidades con `behind: true` se dibujan antes que los luchadores (`Match.draw`).
 
 ## Crear un tipo nuevo
 

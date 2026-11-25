@@ -15,7 +15,7 @@ export default {
   },
   body: {
     shirt: '#f4f6f8', shorts: '#3a4250', skin: '#efc3a0', gloves: '#efc3a0', shoes: '#9bc53d',
-    detail: null, scale: 1, width: 0.95, legs: 1,
+    detail: null, scale: 1, build: 'normal', legs: 1,
   },
   stats: { health: 150, speed: 1.06, jump: 1.03, power: 1, weight: 0.96 },
   special: {

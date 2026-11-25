@@ -10,7 +10,7 @@ export default {
     size: 1,
     art: { skin: '#c98a5e', hair: 'flame', hairColor: '#ff5a1f', hairColor2: '#ffd23f', brows: '#3b1d0e', eye: '#7a3b12', extra: ['beard'], beardColor: '#4a2614' },
   },
-  body: { shirt: '#e63946', shorts: '#1d1d2c', skin: '#c98a5e', gloves: '#ff9f1c', shoes: '#ffd23f', detail: 'flame', detailColor: '#ffd23f', scale: 1.02, width: 1.05 },
+  body: { shirt: '#e63946', shorts: '#1d1d2c', skin: '#c98a5e', gloves: '#ff9f1c', shoes: '#ffd23f', detail: 'flame', detailColor: '#ffd23f', scale: 1.02, build: 'fuerte' },
   stats: { health: 150, speed: 1.0, jump: 1.0, power: 1.05, weight: 1.0 },
   special: {
     name: 'Bola de Brasa',

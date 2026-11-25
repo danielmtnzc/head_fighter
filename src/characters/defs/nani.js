@@ -15,7 +15,7 @@ export default {
   },
   body: {
     shirt: '#2b2733', shorts: '#2b2733', skin: '#f3c6a2', gloves: '#f3c6a2', shoes: '#4a2f22',
-    detail: 'beca', detailColor: '#e8702a', scale: 1.04, width: 0.95, legs: 1.45,
+    detail: 'beca', detailColor: '#e8702a', scale: 1.04, build: 'fuerte', legs: 1.45,
   },
   stats: { health: 148, speed: 1, jump: 1.02, power: 1, weight: 1 },
   special: {
