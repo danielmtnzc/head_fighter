@@ -14,3 +14,4 @@ Idioma del proyecto: español (textos, comentarios y documentación).
 - docs/claude/combate.md — ataques básicos, impactos, invulnerabilidad, energía, IA y valores de equilibrio.
 - docs/claude/interfaz.md — pantallas, HUD, controles táctiles y de teclado, escenario.
 - docs/claude/soluciones.md — registro de bugs difíciles ya resueltos.
+- docs/online.md — investigación y plan (sin implementar) para partidas online: WebRTC P2P, lockstep, Cloudflare Worker, costes.
