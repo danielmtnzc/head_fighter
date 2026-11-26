@@ -6,6 +6,18 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["server.js"],
       "port": 5173
+    },
+    {
+      "name": "salas",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["worker/node_modules/wrangler/bin/wrangler.js", "dev", "--config", "worker/wrangler.toml", "--ip", "0.0.0.0", "--port", "8787"],
+      "port": 8787
+    },
+    {
+      "name": "salas-prueba",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["worker/node_modules/wrangler/bin/wrangler.js", "dev", "--config", "worker/wrangler.toml", "--port", "8788", "--var", "SEAT_MS:1500", "LONELY_MS:3000", "EMPTY_MS:3000", "HELLO_MS:2000", "WATCH_MS:1000", "STALE_MS:12000"],
+      "port": 8788
     }
   ]
 }

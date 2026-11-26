@@ -1,0 +1,33 @@
+# Servidor de salas de Head Fighter: señalización WebRTC y credenciales TURN.
+# En local: npm run dev · Publicar: npm run deploy
+name = "head-fighter-salas"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Webs que pueden usar las salas, separadas por comas (localhost y la red local siempre pueden)
+ALLOWED_ORIGINS = "https://danielmtnzc.github.io"
+
+# Secretos opcionales para TURN (nunca en este archivo):
+#   npx wrangler secret put TURN_KEY_ID
+#   npx wrangler secret put TURN_API_TOKEN
+
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "Room"
+
+# Límites por IP contra el abuso: conexiones a salas y credenciales TURN nuevas
+[[ratelimits]]
+name = "CONNECT_LIMIT"
+namespace_id = "1001"
+simple = { limit = 60, period = 60 }
+
+[[ratelimits]]
+name = "TURN_LIMIT"
+namespace_id = "1002"
+simple = { limit = 6, period = 60 }
+
+# El plan gratuito exige Durable Objects con SQLite
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Room"]

@@ -2,7 +2,7 @@
 
 - Arrancar: `node server.js` → http://localhost:5173 (servidor estático sin dependencias; puerto con la variable `PORT`).
 - En Claude: configuración `la-quinta-del-buitre` de `.claude/launch.json`.
-- No hay build ni paquetes. Los módulos ES necesitan servidor: abrir `index.html` con `file://` no funciona.
+- El juego no tiene build ni paquetes (solo `worker/` usa npm, para `wrangler`). Los módulos ES necesitan servidor: abrir `index.html` con `file://` no funciona.
 - Probar en el móvil: mismo wifi y abrir `http://<IP-del-PC>:5173` en horizontal (el servidor escucha en 0.0.0.0).
 - Publicar: GitHub Pages sirve la rama `gh-pages`, que monta `.github/workflows/pages.yml` en cada push. `main` queda en la raíz y cada otra rama en `/ramas/<rama>/` (las `/` del nombre pasan a `-`); `/ramas/` lista todas. Para probar algo sin tocar la versión estable: trabajar en una rama, subirla y abrir su URL; al fusionar en `main` y borrar la rama, desaparece de `/ramas/`. Las rutas del juego deben seguir siendo relativas para que funcione en subcarpetas.
 
@@ -12,6 +12,8 @@
 - `tools/determinismo.html` (con el servidor arrancado): las mismas partidas en el navegador. El hash debe coincidir con el de node en cualquier dispositivo; cambia cuando cambian reglas o personajes.
 - `node tools/red-sim.mjs`: lockstep con red de mentira (latencia, pérdida, distintas frecuencias de pantalla); comprueba que ambos lados simulan lo mismo y que una desincronización se detecta.
 - `tools/red-local.html`: dos «dispositivos» en una página, con latencia y pérdida ajustables.
+- Salas (Worker): la primera vez `npm install` dentro de `worker/`. Para probarlas, arrancar la configuración `salas-prueba` de `.claude/launch.json` (puerto 8788, plazos cortos) y ejecutar `node tools/worker-test.mjs`.
+- Jugar online en local (desde F4): configuración `salas` (puerto 8787) o `npm run dev -- --ip 0.0.0.0` en `worker/`. Publicar el Worker: `npx wrangler login` y `npm run deploy` en `worker/`, y poner su URL en `src/net/config.js`.
 
 ## Depuración
 

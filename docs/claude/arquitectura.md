@@ -28,8 +28,10 @@ src/ai/ai.js                  IA del rival
 src/stages/azotea.js          escenario
 src/ui/hud.js, select.js      HUD y pantalla de selección
 src/net/                      modo online (en construcción): rng.js (azar con semilla), checksum.js (hash del estado),
-                              inputCodec.js (mandos en 2 bytes), lockstep.js (sesión sincronizada; usa cualquier transporte { send, onMessage })
-tools/                        pruebas: determinismo (harness.js, sim.mjs, determinismo.html) y lockstep (fakeNet.js, red-sim.mjs, red-local.html)
+                              inputCodec.js (mandos en 2 bytes), lockstep.js (sesión sincronizada; usa cualquier transporte { send, onMessage }),
+                              signaling.js (cliente de las salas), config.js (versión de protocolo y URL del Worker)
+worker/                       Cloudflare Worker + Durable Object de las salas (no se publica en Pages)
+tools/                        pruebas: determinismo (harness.js, sim.mjs, determinismo.html), lockstep (fakeNet.js, red-sim.mjs, red-local.html) y salas (worker-test.mjs)
 ```
 
 ## Ideas clave

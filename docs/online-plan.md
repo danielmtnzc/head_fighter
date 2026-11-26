@@ -1,6 +1,6 @@
 # Plan del modo online
 
-Estado: **aprobado**; F0, F1 (probada en PC y móvil) y F2 hechas en la rama `online`. Siguiente: F3. La investigación previa está en `online.md`; donde difieran, manda este plan.
+Estado: **aprobado**; F0, F1 (probada en PC y móvil), F2 y F3 (salas probadas en local) hechas en la rama `online`. Siguiente: F4. La investigación previa está en `online.md`; donde difieran, manda este plan.
 
 ## Decisiones confirmadas
 
@@ -34,12 +34,15 @@ Regla nueva: `world.rng` para lo que afecte a la partida, `rand()` solo para efe
 
 ## Señalización (WebSocket JSON, `/sala/ABCD`)
 
-- Cliente: `hola{v, rol, token?}`, `senal{data}`.
-- Sala: `sala{code, asiento, token}`, `emparejados{ice}`, `senal{data}`, `rival-fuera`, `error{llena | no-existe | ocupada | version | origen}`.
-- Código de 4 letras sin I/O/0/1, generado por el cliente. Máximo 2 asientos; asiento recuperable 60 s con su token.
+- Cliente: `hola{v, rol, token?}`, `senal{data}`, `adios`.
+- Sala: `sala{code, asiento, token}`, `emparejados{ice, ronda}`, `senal{data}`, `rival-fuera{definitivo}`, `error{llena | no-existe | ocupada | version | origen | caducada | abuso}`.
+- Código de 4 letras sin I ni O, generado por el cliente. Máximo 2 asientos; asiento recuperable 60 s con su token (un token caducado da `caducada`). Pasado ese plazo el asiento queda libre para cualquiera con el código.
 - La sala se cierra tras 10 min sin dos jugadores o 5 min vacía. Comprueba `Origin`.
-- Sin endpoint público `/turn`: la sala entrega las credenciales (1 h) al emparejar. Sin secreto TURN, solo STUN.
-- El WebSocket se mantiene abierto (hibernado) para presencia y reconexión.
+- Contra el abuso: 60 conexiones y 6 credenciales TURN nuevas por minuto e IP, y 100 mensajes cada 10 s por conexión.
+- Sin endpoint público `/turn`: la sala entrega las credenciales (1 h, reutilizadas 30 min) al emparejar. Sin secreto TURN, solo STUN.
+- El WebSocket se mantiene abierto (hibernado). El cliente manda `ping` cada 8 s y se reconecta si no hay respuesta en 10 s; la sala da por caído a quien calla 90 s.
+- F4: negociar de cero con cada `emparejados` de ronda nueva (ignorar repetidas; las señales enviadas sin rival se pierden). Puede ser otra persona: comprobarlo con el `hola` del canal `ctl`. Con el canal P2P abierto, `rivalFuera` o `reconectando` no cortan la partida.
+- F6, a mano: cortar la red del móvil sin cerrar la app y publicar el Worker a mitad de una partida.
 
 ## Partida
 
