@@ -3,6 +3,8 @@ export const VIEW_H = 540;
 export const STEP = 1 / 60; // paso fijo de simulación
 export const GRAVITY = 2700;
 export const ROUND_TIME = 99;
+// Multiplica la vida de todos los personajes (stats.health). Sube o baja la duración de los combates.
+export const HEALTH_SCALE = 2;
 
 // Escenario: límites laterales (x) y margen visual que deja la cámara por fuera.
 export const STAGE = { left: -520, right: 520, margin: 190 };

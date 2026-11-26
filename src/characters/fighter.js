@@ -1,6 +1,6 @@
 // Entidad luchador: estado, movimiento, ataques y animación.
 // No sabe nada de un personaje concreto: todo lo lee de su configuración (cfg).
-import { BASE_SPEED, BASE_JUMP, approach } from '../config.js';
+import { BASE_SPEED, BASE_JUMP, HEALTH_SCALE, approach } from '../config.js';
 import { MOVES } from '../combat/moves.js';
 import { SPECIALS } from '../combat/specials/index.js';
 import { SpeechBubble } from '../combat/specials/bubble.js';
@@ -43,7 +43,7 @@ export class Fighter {
   }
 
   get maxHp() {
-    return this.cfg.stats.health;
+    return this.cfg.stats.health * HEALTH_SCALE;
   }
 
   /** Aspecto actual: el suyo o el de una transformación en curso (a.s.form). */

@@ -99,6 +99,15 @@ export const sfx = {
     noise({ dur: 0.45, vol: 0.4, freq: 700, q: 3 });
     tone({ type: 'sawtooth', f: 170, f2: 70, dur: 0.4, vol: 0.14 });
   },
+  inhale() {
+    // calada: chisporroteo suave de la brasa
+    noise({ dur: 0.5, vol: 0.12, freq: 3800, q: 2 });
+  },
+  exhale() {
+    // soplido largo de humo
+    noise({ dur: 0.7, vol: 0.32, freq: 900, q: 0.6 });
+    tone({ type: 'sine', f: 140, f2: 90, dur: 0.5, vol: 0.08 });
+  },
   shotgun() {
     noise({ dur: 0.05, vol: 0.5, freq: 5000 });
     noise({ dur: 0.3, vol: 0.45, freq: 1100 });

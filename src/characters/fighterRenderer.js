@@ -45,10 +45,50 @@ function strokeLimb(ctx, o, pts, w, c1, c2) {
   ctx.stroke();
 }
 
+/** Tatuajes sobre un brazo o una pierna (body.tattoos = color de la tinta). */
+function inkLimb(ctx, o, pts, w, ink, skipUpper = false) {
+  const [jx, jy, ex, ey] = pts;
+  ctx.save();
+  ctx.strokeStyle = ink;
+  ctx.fillStyle = ink;
+  ctx.lineCap = 'round';
+  const segs = skipUpper ? [[jx, jy, ex, ey]] : [[o[0], o[1], jx, jy], [jx, jy, ex, ey]];
+  for (const [x0, y0, x1, y1] of segs) {
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = (-dy / len) * w * 0.42;
+    const ny = (dx / len) * w * 0.42;
+    // bandas y un rombo en medio
+    ctx.lineWidth = 1.4;
+    for (const k of [0.22, 0.78]) {
+      const cx = x0 + dx * k;
+      const cy = y0 + dy * k;
+      ctx.beginPath();
+      ctx.moveTo(cx - nx, cy - ny);
+      ctx.lineTo(cx + nx, cy + ny);
+      ctx.stroke();
+    }
+    const mx = x0 + dx * 0.5;
+    const my = y0 + dy * 0.5;
+    const ux = (dx / len) * w * 0.3;
+    const uy = (dy / len) * w * 0.3;
+    ctx.beginPath();
+    ctx.moveTo(mx - ux, my - uy);
+    ctx.lineTo(mx + nx * 0.7, my + ny * 0.7);
+    ctx.lineTo(mx + ux, my + uy);
+    ctx.lineTo(mx - nx * 0.7, my - ny * 0.7);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
 function drawArm(ctx, o, a, st, body) {
   const pts = limb(o, a[0], a[1], SK.upper, SK.fore, st);
   const { arm } = buildOf(body);
   strokeLimb(ctx, o, pts, 9 * arm, body.shirt, body.skin);
+  if (body.tattoos) inkLimb(ctx, o, pts, 9 * arm, body.tattoos);
   const r = 9.5 * (1 + (arm - 1) * 0.35) * (1 + (st - 1) * 0.3);
   ctx.beginPath();
   ctx.arc(pts[2], pts[3], r, 0, Math.PI * 2);
@@ -69,6 +109,7 @@ const legExtra = (body) => (body.legs || 1) - 1;
 function drawLeg(ctx, o, a, st, body, steel = false) {
   const pts = limb(o, a[0], a[1], SK.thigh, SK.shin, st + legExtra(body));
   strokeLimb(ctx, o, pts, 10 * buildOf(body).leg, body.shorts, body.skin);
+  if (body.tattoos) inkLimb(ctx, o, pts, 10 * buildOf(body).leg, body.tattoos, true);
   if (steel) {
     // rodillera de acero, con brillo
     ctx.lineCap = 'round';
@@ -189,6 +230,33 @@ function drawTorso(ctx, body) {
       ctx.quadraticCurveTo(2, -44, 3, -52);
       ctx.fill();
       break;
+    case 'hoodie': {
+      // sudadera con capucha: forro de color en el cuello, cordones y bolsillo canguro
+      ctx.beginPath();
+      ctx.moveTo(-9, -57);
+      ctx.quadraticCurveTo(4, -44, 17, -57);
+      ctx.lineTo(13, -57);
+      ctx.quadraticCurveTo(4, -49, -5, -57);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = body.detailColor;
+      ctx.lineWidth = 1.8;
+      for (const x of [1, 7]) {
+        ctx.beginPath();
+        ctx.moveTo(x, -51);
+        ctx.lineTo(x + (x < 4 ? -1 : 1), -40);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = 'rgba(0,0,0,0.28)';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(-ww + 3, -27);
+      ctx.lineTo(-ww + 6, -35);
+      ctx.lineTo(ww - 6, -35);
+      ctx.lineTo(ww - 3, -27);
+      ctx.stroke();
+      break;
+    }
     case 'straps':
       // jersey de punto y tirantes de mochila
       ctx.strokeStyle = 'rgba(255,255,255,0.13)';
@@ -257,6 +325,65 @@ function drawTorso(ctx, body) {
       tri('#ffffff', [[-5, -57], [13, -57], [4, -40]]);
       tri(body.tieColor || '#17131c', [[2, -57], [6, -57], [7, -43], [4, -38], [1, -43]]);
       tri(body.detailColor, [[-hw + 2, -57], [-5, -57], [4, -38], [13, -57], [hw - 2, -57], [4, -30]]);
+      break;
+    }
+    case 'tattoos': {
+      // sin camiseta: pectorales, abdominales y tatuajes por todo el torso
+      const ink = body.tattoos || '#2b3340';
+      ctx.strokeStyle = 'rgba(70,35,20,0.35)';
+      ctx.lineWidth = 1.3;
+      ctx.beginPath();
+      ctx.moveTo(-hw + 4, -46);
+      ctx.quadraticCurveTo(-4, -42, 3, -47);
+      ctx.quadraticCurveTo(10, -42, hw - 3, -46);
+      ctx.moveTo(3, -45);
+      ctx.lineTo(3, -30);
+      ctx.moveTo(-3, -39);
+      ctx.lineTo(9, -39);
+      ctx.moveTo(-3, -34);
+      ctx.lineTo(9, -34);
+      ctx.stroke();
+      ctx.strokeStyle = ink;
+      ctx.fillStyle = ink;
+      ctx.lineWidth = 1.6;
+      // alas sobre el pecho
+      for (const s of [-1, 1]) {
+        ctx.beginPath();
+        ctx.moveTo(3 + s * 2, -54);
+        ctx.quadraticCurveTo(3 + s * 10, -58, 3 + s * (hw - 1), -52);
+        ctx.moveTo(3 + s * 3, -52);
+        ctx.quadraticCurveTo(3 + s * 9, -54, 3 + s * (hw - 4), -49);
+        ctx.moveTo(3 + s * 4, -50);
+        ctx.quadraticCurveTo(3 + s * 8, -51, 3 + s * (hw - 8), -47);
+        ctx.stroke();
+      }
+      // rosa en el costado y letras en la tripa
+      ctx.beginPath();
+      ctx.arc(-hw + 7, -38, 3, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(-hw + 7, -38, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(-hw + 7, -35);
+      ctx.lineTo(-hw + 9, -30);
+      ctx.stroke();
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      for (let x = -ww + 5; x < ww - 4; x += 3.5) {
+        ctx.moveTo(x, -31);
+        ctx.lineTo(x + 1.5, -29);
+      }
+      ctx.stroke();
+      // estrella en el hombro
+      ctx.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const rr = i % 2 ? 1.4 : 3.2;
+        const an = (i / 10) * Math.PI * 2 - Math.PI / 2;
+        ctx.lineTo(hw - 5 + Math.cos(an) * rr, -40 + Math.sin(an) * rr);
+      }
+      ctx.closePath();
+      ctx.fill();
       break;
     }
     case 'heart':

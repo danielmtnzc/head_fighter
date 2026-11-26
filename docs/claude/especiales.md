@@ -16,9 +16,13 @@ Al activarse, `Match.onSpecialStart` hace la pausa dramática: congela, oscurece
 - **`spray`** — suelta por la boca un chorro que golpea una vez. `params`: `startup`, `duration`, `recovery`, `reach`, `mouthX`, `mouthY`, `sickSkin` (color de piel mientras dura).
 - **`gang`** — silba y una cuadrilla llega corriendo por detrás; cada uno pega una vez y el último remata. Se esquiva saltando: el grupo entero (`(crew-1)·gap + 120` px a `speed`) tiene que pasar en menos de ~0,45 s, que es lo que el salto más bajo (`jump` 0.88) se mantiene por encima de su caja de 60 px de alto; por eso van en piña. `params`: `startup`, `recovery`, `speed`, `gap` (separación), `behind` (distancia inicial), `finisher`, `crew` (lista de `{ art, body, size }`: cambios sobre el aspecto del luchador).
 
+- **`pileOn`** — grita y sus amigos entran saltando desde los dos bordes de la pantalla, uno tras otro, y caen en plancha sobre el rival; al caer celebran y se vuelven corriendo. Siguen al rival hasta `lock` (fracción del vuelo, 0,6) y luego no: se esquiva apartándose de la sombra en el último momento. Cada uno golpea al aterrizar; el último remata. `params`: `startup`, `recovery`, `interval`, `flight`, `height`, `spread` (separación de los aterrizajes), `width` (zona de golpe), `lock`, `finisher`, `crew` (como en `gang`).
+
 - **`skyDrop`** — del cielo cae un edificio donde está el rival; una sombra avisa (se puede esquivar). Al caer golpea, se queda un rato por detrás de los luchadores (`behind: true`) y se desvanece. `params`: `startup`, `recovery`, `fall` (segundos de caída), `width`, `height` (zona de golpe), `stay`, `building` (de `BUILDINGS` en `skyDrop.js`; hay `bar`, con la señora en la puerta), `sign` (letrero).
 
 - **`cards`** — lanza en ráfaga cartones cuadrados de colores que giran en línea recta (se pueden saltar). Solo impacta uno por ráfaga y marea al rival; los demás le atraviesan. `params`: `startup`, `recovery`, `count`, `interval`, `speed`, `size`, `spawnX`, `spawnY`, `spread`, `dizzy` (segundos de mareo), `colors`.
+
+- **`smoke`** — saca un cigarro y le da una calada (pose `smokeDrag`: la mano en la boca, la brasa se aviva y sale un hilillo gris); luego sopla una nube (pose `smokeBlow`, partículas `puff` de `effects.js` en `fx.color`/`fx.color2`) que avanza y golpea una vez. Se esquiva con distancia. `params`: `startup` (dura la calada), `duration` (soplido), `recovery`, `reach`, `mouthX`, `mouthY`, `cloudH` (alto de la nube), `dizzy` (segundos de mareo, opcional).
 
 **Mareo**: cualquier golpe con `dizzy: segundos` en su `spec` deja al rival mareado (`Fighter.dizzyT`): dirección invertida, anda al 70 %, cara de dolor y estrellitas girando sobre la cabeza. Se puede usar en otros especiales con `params.hit.dizzy`.
 

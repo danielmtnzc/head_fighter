@@ -262,7 +262,7 @@ function drawDrawnHead(ctx, r, art, expr, t) {
     ctx.ellipse(r * 0.26, r * 0.8, r * 0.95, r * 0.58, 0, 0, Math.PI * 2);
     ctx.fill();
   }
-  if (art.hair === 'quiff' || art.hair === 'crop' || art.hair === 'fringe' || art.hair === 'bangs' || art.hair === 'buzz' || art.hair === 'pomp' || art.hair === 'shaved') {
+  if (art.hair === 'quiff' || art.hair === 'crop' || art.hair === 'fringe' || art.hair === 'bangs' || art.hair === 'buzz' || art.hair === 'pomp' || art.hair === 'shaved' || art.hair === 'curly') {
     // degradado rapado de las sienes
     const g = ctx.createLinearGradient(0, -r * 0.65, 0, r * 0.12);
     g.addColorStop(0, hairC);
@@ -526,6 +526,81 @@ function drawDrawnHead(ctx, r, art, expr, t) {
       ctx.lineWidth = lw;
       break;
     }
+    case 'curly': {
+      // rizos oscuros revueltos con volumen arriba y alguno cayendo sobre la frente
+      const bump = (x0, y0, x1, y1, out) => {
+        // curva hacia fuera respecto al centro del pelo (0, -0.4)
+        const mx = (x0 + x1) / 2;
+        const my = (y0 + y1) / 2;
+        const d = Math.hypot(mx, my + 0.4) || 1;
+        ctx.quadraticCurveTo((mx + (mx / d) * out) * r, (my + ((my + 0.4) / d) * out) * r, x1 * r, y1 * r);
+      };
+      const top = [];
+      for (let i = 0; i <= 9; i++) {
+        const a = Math.PI * (1.0 + (i / 9) * 0.98);
+        top.push([Math.cos(a) * 1.0, -0.4 + Math.sin(a) * (0.98 + (i % 2) * 0.05)]);
+      }
+      ctx.beginPath();
+      poly(ctx, r, [[-0.86, -0.26], top[0]]);
+      for (let i = 1; i < top.length; i++) bump(...top[i - 1], ...top[i], 0.2);
+      const front = [[0.9, -0.44], [0.74, -0.56], [0.54, -0.46], [0.36, -0.6], [0.14, -0.5], [-0.08, -0.62], [-0.3, -0.5], [-0.5, -0.32]];
+      bump(...top[top.length - 1], ...front[0], 0.08);
+      for (let i = 1; i < front.length; i++) bump(...front[i - 1], ...front[i], -0.12);
+      ctx.quadraticCurveTo(-r * 0.7, -r * 0.4, -r * 0.86, -r * 0.26);
+      ctx.closePath();
+      fillStroke(ctx, hairC);
+      // espirales de los rizos
+      ctx.strokeStyle = art.hairColor2 || 'rgba(255,255,255,0.22)';
+      ctx.lineWidth = lw * 0.85;
+      for (const [x, y, s] of [
+        [-0.66, -0.8, 0.13], [-0.34, -1.06, 0.14], [0.02, -1.14, 0.14], [0.38, -1.06, 0.14], [0.7, -0.86, 0.13],
+        [-0.4, -0.74, 0.11], [-0.04, -0.82, 0.12], [0.32, -0.78, 0.11], [0.62, -0.62, 0.1], [0.1, -0.62, 0.09],
+      ]) {
+        ctx.beginPath();
+        ctx.arc(x * r, y * r, s * r, Math.PI * 0.9, Math.PI * 2.3);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = lw;
+      break;
+    }
+    case 'wavy': {
+      // melena ondulada y revuelta, con volumen arriba y a los lados
+      const bump = (x0, y0, x1, y1, out) => {
+        const mx = (x0 + x1) / 2;
+        const my = (y0 + y1) / 2;
+        const d = Math.hypot(mx, my + 0.6) || 1;
+        ctx.quadraticCurveTo((mx + (mx / d) * out) * r, (my + ((my + 0.6) / d) * out) * r, x1 * r, y1 * r);
+      };
+      const top = [
+        [-0.96, -0.5], [-1.16, -0.82], [-1.06, -1.16], [-0.74, -1.4], [-0.36, -1.52],
+        [0.06, -1.54], [0.46, -1.44], [0.84, -1.22], [1.1, -0.9], [1.06, -0.6],
+      ];
+      ctx.beginPath();
+      poly(ctx, r, [top[0]]);
+      for (let i = 1; i < top.length; i++) bump(...top[i - 1], ...top[i], i % 3 ? 0.16 : 0.26);
+      const front = [[0.86, -0.5], [0.6, -0.6], [0.3, -0.52], [0.0, -0.62], [-0.3, -0.54], [-0.6, -0.62]];
+      bump(...top[top.length - 1], ...front[0], 0.06);
+      for (let i = 1; i < front.length; i++) bump(...front[i - 1], ...front[i], -0.08);
+      ctx.quadraticCurveTo(-r * 0.8, -r * 0.58, -r * 0.96, -r * 0.5);
+      ctx.closePath();
+      fillStroke(ctx, hairC);
+      // ondas
+      ctx.strokeStyle = art.hairColor2 || 'rgba(255,255,255,0.22)';
+      ctx.lineWidth = lw * 0.9;
+      for (const [x0, y0, cx, cy, x1, y1] of [
+        [-0.86, -0.9, -0.7, -1.2, -0.4, -1.26], [-0.5, -0.9, -0.3, -1.3, 0.1, -1.32], [-0.1, -0.86, 0.2, -1.2, 0.56, -1.16],
+        [0.3, -0.8, 0.6, -1.0, 0.86, -0.86], [-0.7, -0.72, -0.5, -0.9, -0.2, -0.86],
+      ]) {
+        ctx.beginPath();
+        ctx.moveTo(x0 * r, y0 * r);
+        ctx.quadraticCurveTo(cx * r, cy * r, x1 * r, y1 * r);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = lw;
+      break;
+    }
     case 'bald':
       ctx.fillStyle = 'rgba(255,255,255,0.35)';
       ctx.beginPath();
@@ -538,6 +613,44 @@ function drawDrawnHead(ctx, r, art, expr, t) {
       ctx.bezierCurveTo(r * 0.4, -r * 0.5, -r * 0.4, -r * 0.62, -r * 0.86, -r * 0.1);
       ctx.closePath();
       fillStroke(ctx, hairC);
+  }
+
+  if (art.extra?.includes('sweatband')) {
+    // cinta ancha de punto en la frente, con mechones que caen por encima
+    ctx.beginPath();
+    ctx.moveTo(-r * 1.0, -r * 0.74);
+    ctx.quadraticCurveTo(r * 0.0, -r * 1.02, r * 1.0, -r * 0.84);
+    ctx.lineTo(r * 0.98, -r * 0.5);
+    ctx.quadraticCurveTo(r * 0.0, -r * 0.7, -r * 0.98, -r * 0.4);
+    ctx.closePath();
+    fillStroke(ctx, art.bandColor || '#1e1f24');
+    ctx.save();
+    ctx.clip();
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = lw * 0.6;
+    for (let x = -0.9; x <= 0.95; x += 0.15) {
+      ctx.beginPath();
+      ctx.moveTo(x * r, -r * 1.05);
+      ctx.lineTo(x * r, -r * 0.35);
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.strokeStyle = OUTLINE;
+    ctx.lineWidth = lw;
+    // mechones gruesos que caen sobre la cinta
+    const locks = [[0.02, -0.96, 0.34, -0.9, 0.3, -0.58], [0.44, -0.94, 0.78, -0.86, 0.68, -0.54]];
+    for (const [w, c] of [[lw * 4.6, OUTLINE], [lw * 2.8, hairC]]) {
+      ctx.strokeStyle = c;
+      ctx.lineWidth = w;
+      for (const [x0, y0, cx, cy, x1, y1] of locks) {
+        ctx.beginPath();
+        ctx.moveTo(x0 * r, y0 * r);
+        ctx.quadraticCurveTo(cx * r, cy * r, x1 * r, y1 * r);
+        ctx.stroke();
+      }
+    }
+    ctx.strokeStyle = OUTLINE;
+    ctx.lineWidth = lw;
   }
 
   drawFace(ctx, r, art, expr, t, lw, hairC);

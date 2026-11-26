@@ -71,6 +71,12 @@ export class SelectScreen {
       picks.parentElement.classList.toggle('more-r', picks.scrollLeft < max - 4);
     };
     picks.addEventListener('scroll', hints, { passive: true });
+    // en el ordenador, la rueda del ratón también desliza la fila
+    picks.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      picks.scrollLeft += e.deltaY;
+      e.preventDefault();
+    });
     new ResizeObserver(hints).observe(picks);
     // pestañas de grupo: filtran los luchadores que se ven, sin cambiar el elegido
     const tabs = GROUPS.map((g) => {

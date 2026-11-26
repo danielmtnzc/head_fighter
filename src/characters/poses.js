@@ -66,6 +66,8 @@ const STATIC = {
   kneeFly: [P({ dy: -24, lean: -0.22, lf: [1.75, -2.3], lsF: 3.1, lb: [-0.7, -0.7], af: [-0.7, 0.6], ab: [-1.2, 0.2], headTilt: -0.05 }), 50],
   sickWind: [P({ lean: -0.2, headTilt: -0.15, headY: 3, af: [0.5, 1.9], ab: [0.4, 1.9], lf: [0.5, -0.8], lb: [-0.4, -0.5], sx: 1.05, sy: 0.95 }), 18],
   sickGo: [P({ lean: 0.4, headTilt: 0.05, headX: 6, af: [-0.7, 0.4], ab: [-0.9, 0.3], lf: [0.6, -0.5], lb: [-0.6, 0.05] }), 40],
+  smokeDrag: [P({ lean: -0.08, headTilt: -0.12, af: [1.84, 1.6], ab: [0.1, 1.6], lf: [0.35, -0.4], lb: [-0.4, -0.1], sx: 0.97, sy: 1.04 }), 16],
+  smokeBlow: [P({ lean: 0.3, headTilt: 0.08, headX: 5, af: [0.75, 1.15], ab: [-0.5, 1.3], lf: [0.6, -0.5], lb: [-0.6, 0.05] }), 30],
   callWind: [P({ lean: -0.18, headTilt: -0.12, af: [1.9, 1.5], asF: 1.7, ab: [-0.5, 1.0], lf: [0.4, -0.4], lb: [-0.4, -0.1] }), 26],
   callGo: [P({ lean: 0.22, af: [1.6, 0], asF: 2, ab: [-0.7, 1.6], lf: [0.6, -0.5], lb: [-0.6, 0.05], headTilt: -0.05 }), 40],
   itemWind: [P({ lean: -0.15, af: [2.15, 0.45], ab: [0.9, 0.6], asF: 2.7, lf: [0.6, -0.6], lb: [-0.5, -0.2], headTilt: 0.05 }), 22],

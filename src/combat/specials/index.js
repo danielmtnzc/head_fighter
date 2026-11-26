@@ -20,5 +20,7 @@ import spray from './spray.js';
 import gang from './gang.js';
 import skyDrop from './skyDrop.js';
 import cards from './cards.js';
+import pileOn from './pileOn.js';
+import smoke from './smoke.js';
 
-export const SPECIALS = { projectile, dash, explosion, multihit, shotgun, spray, gang, skyDrop, cards };
+export const SPECIALS = { projectile, dash, explosion, multihit, shotgun, spray, gang, skyDrop, cards, pileOn, smoke };

@@ -12,7 +12,9 @@ import minimocho from './defs/minimocho.js';
 import mogailes from './defs/mogailes.js';
 import escu from './defs/escu.js';
 import loison from './defs/loison.js';
+import huesito from './defs/huesito.js';
+import zelaking from './defs/zelaking.js';
 
-export const ROSTER = [rayo, brasas, tanque, chispa, nani, kalong, jd, pipo, minimocho, mogailes, escu, loison];
+export const ROSTER = [rayo, brasas, tanque, chispa, nani, kalong, jd, pipo, minimocho, mogailes, escu, loison, huesito, zelaking];
 
 export const getCharacter = (id) => ROSTER.find((c) => c.id === id) || ROSTER[0];

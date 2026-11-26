@@ -22,7 +22,7 @@ De 0 a 100. Sube sola (`100 / cooldown` por segundo), al golpear con ataques bá
 
 ## Fin del combate
 
-K.O. cuando la vida llega a 0: cámara lenta, enfoque al perdedor, rebote, y pose de victoria del ganador. Si el tiempo (99 s) se agota gana quien conserve mayor porcentaje de vida; si empatan, empate.
+K.O. cuando la vida llega a 0: cámara lenta, enfoque al perdedor, rebote, y pose de victoria del ganador. Si el tiempo (`ROUND_TIME`, 99 s) se agota gana quien conserve mayor porcentaje de vida; si empatan, empate.
 
 ## IA (`src/ai/ai.js`)
 
@@ -30,4 +30,4 @@ K.O. cuando la vida llega a 0: cámara lenta, enfoque al perdedor, rebote, y pos
 
 ## Equilibrio
 
-Valores ajustados con simulaciones IA contra IA: combates de unos 34 s de media. En esas simulaciones Tanque y Rayo ganan más que Brasas y Chispa; es orientativo, porque depende de cómo juega la IA cada especial.
+La duración de los combates se regula con `HEALTH_SCALE` (`config.js`), que multiplica la vida de todos; así no hay que tocar daños ni personajes. Con `HEALTH_SCALE = 2` las simulaciones IA contra IA duran unos 72 s de media (con 1 duraban 35 s y entre humanos ~30 s). El daño se reparte aproximadamente 63 % golpes básicos y 37 % especiales. En esas simulaciones Tanque y Rayo ganan más que Brasas y Chispa; es orientativo, porque depende de cómo juega la IA cada especial.

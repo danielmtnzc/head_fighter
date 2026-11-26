@@ -38,7 +38,7 @@ Si la foto es pequeña o no se distingue un rasgo, no inventarlo; pedir otra si 
 
 - Siempre caricatura (`type: 'drawn'`), nunca la foto recortada. La foto original no se guarda en el proyecto ni se sube al repositorio (`.gitignore` las bloquea en `assets/heads/`); cuando el personaje esté terminado, borrar las copias locales, confirmando antes con el usuario cuáles.
 - Reutilizar primero lo que hay en `art`. Si un rasgo no existe, añadirlo a `src/characters/heads.js` como opción reutilizable, sin cambiar a los demás.
-- El pelo es lo que más distingue: evitar que dos amigos compartan peinado idéntico. Usados: `quiff` (Ñañi), `crop` (KalonG), `fringe` (JD), `curtain` (Pipo), `buzz` (MiniMocho), `bangs` (Mogailes), `pomp` (Escu), `shaved` (Loison).
+- El pelo es lo que más distingue: evitar que dos amigos compartan peinado idéntico. Usados: `quiff` (Ñañi), `crop` (KalonG), `fringe` (JD), `curtain` (Pipo), `buzz` (MiniMocho), `bangs` (Mogailes), `pomp` (Escu), `shaved` (Loison), `curly` (Huesito), `wavy` con `sweatband` (Zelaking).
 - Coordenadas en radios de cabeza, mirando a la derecha en tres cuartos: una sola oreja, la de la izquierda.
 - Altura: `body.legs` alarga o acorta piernas y `body.scale` agranda todo; valores en «Alturas».
 - `head.size` cerca de 1; si el pelo sube mucho, comprobar que no se corta en los retratos.
@@ -59,8 +59,8 @@ Todo personaje es de uno de estos cuatro tipos. La altura en unidades es `(88 + 
 | Tipo | Altura | Valores de partida (`body`) | Personajes |
 |---|---|---|---|
 | Pequeño | menos de 122 | `scale 0.92, legs 0.85` | JD (113), Chispa (120) |
-| Medio | 122–136 | `scale 1, legs 1` | Mogailes (123, medio-bajo), Rayo (128), KalonG (128), Escu (128), MiniMocho (129), Brasas (131) |
-| Alto | 137–148 | `scale 1.04, legs 1.45` | Ñañi (143), Pipo (143), Tanque (143), Loison (143) |
+| Medio | 122–136 | `scale 1, legs 1` | Mogailes (123, medio-bajo), Rayo (128), KalonG (128), Escu (128), Zelaking (128), MiniMocho (129), Brasas (131) |
+| Alto | 137–148 | `scale 1.04, legs 1.45` | Ñañi (143), Pipo (143), Tanque (143), Loison (143), Huesito (143) |
 | Súper alto | más de 148 | `scale 1.08, legs 1.9` (159; sin probar: revisar retratos y selección) | ninguno todavía |
 
 JD debe seguir siendo el más bajo. La caja de colisión es igual para todos: la altura es solo visual. Al crear un personaje o cambiarle la altura, actualizar esta tabla.
@@ -73,9 +73,9 @@ Se elige con `body.build`; los valores de cada tipo están en `src/characters/bu
 |---|---|---|
 | Delgado | `delgado` | Rayo, Chispa, Loison |
 | Normal | `normal` | Mogailes, MiniMocho |
-| Medio-fuerte | `medioFuerte` | JD |
+| Medio-fuerte | `medioFuerte` | JD, Huesito |
 | Fuerte | `fuerte` | Ñañi, Brasas |
-| Medio-relleno | `medioRelleno` | KalonG, Pipo |
+| Medio-relleno | `medioRelleno` | KalonG, Pipo, Zelaking |
 | Un poco gordo | `pocoGordo` | ninguno todavía |
 | Gordo | `gordo` | Escu |
 | Muy gordo | `muyGordo` | Tanque |
@@ -84,7 +84,7 @@ La cabeza tapa buena parte del torso, así que las diferencias deben exagerarse 
 
 ## 4. Superataque
 
-- Buscar primero un tipo existente y parametrizarlo: `projectile` con `item` para lanzar objetos (dibujarlos en `specials/items.js`), `dash` con `form` para transformarse, `shotgun` para disparar, `skyDrop` para que caiga algo del cielo (con `say` para un bocadillo), `cards` para lanzar una ráfaga de cartones que marean.
+- Buscar primero un tipo existente y parametrizarlo: `projectile` con `item` para lanzar objetos (dibujarlos en `specials/items.js`), `dash` con `form` para transformarse, `shotgun` para disparar, `skyDrop` para que caiga algo del cielo (con `say` para un bocadillo), `cards` para lanzar una ráfaga de cartones que marean, `gang` (llegan corriendo) o `pileOn` (caen saltando) para que vengan amigos a ayudar, `smoke` para dar una calada y echar humo.
 - El objeto o la transformación tiene que verse antes del golpe (unos 0,5 s) y no tapar la cara.
 - Personajes o marcas de terceros: diseño propio que haga el guiño, sin copiar su aspecto ni logotipos.
 - Daño de 19 a 22 y recarga de 8 s como punto de partida; debe poder esquivarse.
