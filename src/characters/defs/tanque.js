@@ -18,7 +18,7 @@ export default {
     type: 'explosion',
     damage: 22,
     cooldown: 10,
-    params: { leap: 780, blastRadius: 120, waveSpeed: 560, waveRange: 400, waveDamage: 0.6, recovery: 0.5 },
+    params: { say: '¡Agarraos fuerte!', leap: 780, blastRadius: 120, waveSpeed: 560, waveRange: 400, waveDamage: 0.6, recovery: 0.5 },
     fx: { color: '#2ec4b6', color2: '#c9a27a', text: '¡BRUUM!' },
     ai: { min: 0, max: 330 },
   },

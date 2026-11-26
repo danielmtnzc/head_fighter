@@ -24,7 +24,7 @@ export default {
     type: 'projectile',
     damage: 19,
     cooldown: 8,
-    params: {
+    params: { say: '¡Este va por ti!',
       startup: 0.5, recovery: 0.35, speed: 720, vy: -180, gravity: 620, radius: 18, spawnX: 56, spawnY: -95,
       spin: 13, recoil: 0, item: 'bottle', windPose: 'itemWind',
     },

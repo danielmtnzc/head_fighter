@@ -3,6 +3,7 @@
 import { BASE_SPEED, BASE_JUMP, approach } from '../config.js';
 import { MOVES } from '../combat/moves.js';
 import { SPECIALS } from '../combat/specials/index.js';
+import { SpeechBubble } from '../combat/specials/bubble.js';
 import { makePose, targetPose, lerpPose } from './poses.js';
 import { sfx } from '../engine/audio.js';
 
@@ -127,6 +128,8 @@ export class Fighter {
     this.energy = 0;
     this.action = { kind: 'special', sp, handler, t: 0, s: {}, keepVel: false };
     handler.start(this, sp, world, this.action);
+    // frase que grita al lanzarlo (special.params.say), sea cual sea el tipo
+    if (sp.params?.say) world.spawn(new SpeechBubble(this, sp.params.say, (sp.params.startup ?? 0.4) + 1.7));
     world.onSpecialStart(this, sp);
   }
 

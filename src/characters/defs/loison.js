@@ -23,8 +23,8 @@ export default {
     name: 'Cartones Mágicos',
     description: 'Grita «¡Cartones Mágicos!» y lanza una ráfaga de cartones de colores que marean al rival.',
     type: 'cards',
-    damage: 19,
-    cooldown: 8.5,
+    damage: 21,
+    cooldown: 7.5,
     params: {
       startup: 0.5, recovery: 0.35, say: '¡Cartones Mágicos!', count: 4, interval: 0.09,
       speed: 760, size: 32, spawnX: 50, spawnY: -72, spread: 12, dizzy: 2.5,

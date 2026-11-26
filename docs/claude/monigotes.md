@@ -15,6 +15,7 @@ Proceso para convertir la foto de un amigo en personaje. Los campos técnicos es
 | Altura: pequeño, medio, alto o súper alto | Preguntar (ver «Alturas») |
 | Complexión: delgado, normal, fuerte, un poco gordo o muy gordo (o intermedios) | Preguntar (ver «Complexiones») |
 | Frase corta | Inventarla según el superataque y avisar |
+| Frase del bocadillo al lanzar el superataque (`params.say`) | Inventarla según el superataque y avisar |
 | Texto al impactar | Inventarlo (¡PREMIO!, ¡CHUPITO!, ¡CABEZAZO!) y avisar |
 | Ropa | La de la foto |
 | Color | Elegir uno distinto de los ya usados |

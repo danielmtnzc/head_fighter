@@ -2,9 +2,9 @@
 
 Cada tipo es un comportamiento reutilizable en `src/combat/specials/<tipo>.js`, registrado en `index.js` (`SPECIALS`). El personaje elige el tipo con `special.type` y lo ajusta con `special.params` y `special.fx`.
 
-Comunes: `special.damage`, `special.cooldown` (segundos para recargar la energía de 0 a 100), `fx: { color, color2, text }` (`text` = palabra cómic al impactar), `ai: { min, max }` (distancias a las que la IA lo usa). `params.hit` permite sobrescribir el golpe (`knockback: {x, y}`, `hitstun`, `hitstop`, `shake`…); la base está en `common.js` (`specialHit`).
+Comunes: `params.say` (frase que grita en un bocadillo al lanzarlo, para cualquier tipo; la pone `Fighter.startSpecial` y dura `startup` + 1,7 s), `special.damage`, `special.cooldown` (segundos para recargar la energía de 0 a 100), `fx: { color, color2, text }` (`text` = palabra cómic al impactar), `ai: { min, max }` (distancias a las que la IA lo usa). `params.hit` permite sobrescribir el golpe (`knockback: {x, y}`, `hitstun`, `hitstop`, `shake`…); la base está en `common.js` (`specialHit`).
 
-Al activarse, `Match.onSpecialStart` hace la pausa dramática: congela, oscurece el fondo y muestra el nombre del golpe.
+Al activarse, `Match.onSpecialStart` hace la pausa dramática: congela, oscurece el fondo y muestra el nombre del golpe (1,8 s). La palabra de impacto de un especial dura 1,3 s.
 
 ## Tipos
 
@@ -16,13 +16,13 @@ Al activarse, `Match.onSpecialStart` hace la pausa dramática: congela, oscurece
 - **`spray`** — suelta por la boca un chorro que golpea una vez. `params`: `startup`, `duration`, `recovery`, `reach`, `mouthX`, `mouthY`, `sickSkin` (color de piel mientras dura).
 - **`gang`** — silba y una cuadrilla llega corriendo por detrás; cada uno pega una vez y el último remata. Se esquiva saltando: el grupo entero (`(crew-1)·gap + 120` px a `speed`) tiene que pasar en menos de ~0,45 s, que es lo que el salto más bajo (`jump` 0.88) se mantiene por encima de su caja de 60 px de alto; por eso van en piña. `params`: `startup`, `recovery`, `speed`, `gap` (separación), `behind` (distancia inicial), `finisher`, `crew` (lista de `{ art, body, size }`: cambios sobre el aspecto del luchador).
 
-- **`skyDrop`** — grita una frase en un bocadillo y del cielo cae un edificio donde está el rival; una sombra avisa (se puede esquivar). Al caer golpea, se queda un rato por detrás de los luchadores (`behind: true`) y se desvanece. `params`: `startup`, `recovery`, `say` (texto del bocadillo), `fall` (segundos de caída), `width`, `height` (zona de golpe), `stay`, `building` (de `BUILDINGS` en `skyDrop.js`; hay `bar`, con la señora en la puerta), `sign` (letrero).
+- **`skyDrop`** — del cielo cae un edificio donde está el rival; una sombra avisa (se puede esquivar). Al caer golpea, se queda un rato por detrás de los luchadores (`behind: true`) y se desvanece. `params`: `startup`, `recovery`, `fall` (segundos de caída), `width`, `height` (zona de golpe), `stay`, `building` (de `BUILDINGS` en `skyDrop.js`; hay `bar`, con la señora en la puerta), `sign` (letrero).
 
-- **`cards`** — grita una frase (`say`) y lanza en ráfaga cartones cuadrados de colores que giran en línea recta (se pueden saltar). El primero que impacta marea al rival; los demás le atraviesan por la invulnerabilidad. `params`: `startup`, `recovery`, `say`, `count`, `interval`, `speed`, `size`, `spawnX`, `spawnY`, `spread`, `dizzy` (segundos de mareo), `colors`.
+- **`cards`** — lanza en ráfaga cartones cuadrados de colores que giran en línea recta (se pueden saltar). Solo impacta uno por ráfaga y marea al rival; los demás le atraviesan. `params`: `startup`, `recovery`, `count`, `interval`, `speed`, `size`, `spawnX`, `spawnY`, `spread`, `dizzy` (segundos de mareo), `colors`.
 
 **Mareo**: cualquier golpe con `dizzy: segundos` en su `spec` deja al rival mareado (`Fighter.dizzyT`): dirección invertida, anda al 70 %, cara de dolor y estrellitas girando sobre la cabeza. Se puede usar en otros especiales con `params.hit.dizzy`.
 
-El bocadillo de diálogo (`SpeechBubble`) está en `specials/bubble.js` y lo usan `skyDrop` y `cards`.
+El bocadillo de diálogo (`SpeechBubble`) está en `specials/bubble.js`.
 
 Las entidades con `behind: true` se dibujan antes que los luchadores (`Match.draw`).
 

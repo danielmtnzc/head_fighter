@@ -18,7 +18,7 @@ export default {
     type: 'projectile',
     damage: 19,
     cooldown: 6,
-    params: { startup: 0.3, recovery: 0.35, speed: 720, radius: 22 },
+    params: { say: '¡Cuidado, que quema!', startup: 0.3, recovery: 0.35, speed: 720, radius: 22 },
     fx: { color: '#ff7a1a', color2: '#ffe45c', text: '¡FUEGO!' },
     ai: { min: 220, max: 900 },
   },

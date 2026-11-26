@@ -7,7 +7,6 @@
 import { STAGE, OUTLINE, FONT, clamp, rand } from '../../config.js';
 import { specialHit } from './common.js';
 import { sfx } from '../../engine/audio.js';
-import { SpeechBubble } from './bubble.js';
 
 // ---------------------------------------------------------------- edificios
 
@@ -300,7 +299,6 @@ class FallingBuilding {
 export default {
   start(f, sp, world, a) {
     a.s.dropped = false;
-    if (sp.params.say) world.spawn(new SpeechBubble(f, sp.params.say, sp.params.startup + 0.9));
   },
   update(f, sp, world, dt, a) {
     const p = sp.params;

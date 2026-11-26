@@ -24,7 +24,7 @@ export default {
     type: 'spray',
     damage: 22,
     cooldown: 8,
-    params: { startup: 0.42, duration: 0.5, recovery: 0.35, reach: 290, mouthX: 15, mouthY: -50, sickSkin: '#a9c77a' },
+    params: { say: 'Uy... que me viene...', startup: 0.42, duration: 0.5, recovery: 0.35, reach: 290, mouthX: 15, mouthY: -50, sickSkin: '#a9c77a' },
     fx: { color: '#9bc53d', color2: '#d6e86a', text: '¡POTA DE UCRANIANA!' },
     ai: { min: 60, max: 280 },
   },

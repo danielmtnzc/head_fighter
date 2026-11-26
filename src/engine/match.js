@@ -61,7 +61,7 @@ export class Match {
     this.hitstop = Math.max(this.hitstop, spec.hitstop || 0);
     this.camera.shake(spec.shake || 0);
     const word = spec.text === undefined ? (power >= 2 ? HIT_WORDS[Math.floor(rand(HIT_WORDS.length))] : null) : spec.text;
-    if (word && typeof word === 'string') this.fx.text(x, y - 46, word, color, (power >= 3 ? 56 : 42) * Math.min(1, 11 / word.length));
+    if (word && typeof word === 'string') this.fx.text(x, y - 46, word, color, (power >= 3 ? 56 : 42) * Math.min(1, 11 / word.length), spec.special ? 1.3 : 0.75);
     if (power >= 3) this.fx.flash('#fff', 0.3);
     if (!this.silent) sfx.hit(power);
     if (!spec.special) att.energy = Math.min(100, att.energy + spec.damage * 0.9);
@@ -75,7 +75,7 @@ export class Match {
     this.hitstop = Math.max(this.hitstop, 0.28);
     this.fx.dim(0.55);
     this.fx.ring(f.x, f.y - 60, sp.fx?.color || f.cfg.color, 150, 0.4);
-    this.fx.text(f.x, f.y - 170, sp.name.toUpperCase(), sp.fx?.color || f.cfg.color, 34);
+    this.fx.text(f.x, f.y - 170, sp.name.toUpperCase(), sp.fx?.color || f.cfg.color, 38, 1.8, rand(-0.08, 0.08));
     if (!this.silent) sfx.special();
   }
 

@@ -25,7 +25,7 @@ export default {
     type: 'dash',
     damage: 20,
     cooldown: 8.5,
-    params: {
+    params: { say: '¡Ahí va mi rodilla!',
       startup: 0.45, speed: 980, duration: 0.48, recovery: 0.38, reach: 66,
       poses: { charge: 'kneeWind', go: 'kneeFly', hit: 'kneeFly' },
       form: { body: { steelKnee: true } },

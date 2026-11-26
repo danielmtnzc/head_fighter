@@ -24,7 +24,7 @@ export default {
     type: 'gang',
     damage: 22,
     cooldown: 8.5,
-    params: {
+    params: { say: '¡Primos, venid!',
       startup: 0.5, recovery: 0.4, speed: 760, gap: 26, behind: 170, finisher: 0.35,
       crew: [
         { art: { hair: 'crop', extra: ['thickBrows'] }, body: { shirt: '#d63c3c', detail: 'stripe', detailColor: '#ffffff', scale: 1, legs: 1.2 } },

@@ -1,12 +1,11 @@
 // ESPECIAL: CARTONES. Grita una frase (bocadillo) y lanza en ráfaga cartones cuadrados de
-// colores que viajan girando en línea recta (se pueden saltar). El primero que impacta deja
+// colores que viajan girando en línea recta (se pueden saltar). Solo impacta el primero, que deja
 // al rival mareado (controles invertidos y más lento) unos segundos; los demás le atraviesan.
 // params: startup, recovery, say?, count (cartones), interval (s entre cartones), speed,
 //         size (lado del cartón), spawnX, spawnY, spread (dispersión vertical), dizzy (s de mareo),
 //         colors (lista de colores)
 import { STAGE, OUTLINE, rand } from '../../config.js';
 import { specialHit } from './common.js';
-import { SpeechBubble } from './bubble.js';
 import { sfx } from '../../engine/audio.js';
 
 const COLORS = ['#ff4f8b', '#ffd23f', '#3ddc97', '#3d9bff', '#b56bff', '#ff8a3d'];
@@ -37,7 +36,8 @@ function drawCard(ctx, size, color) {
 }
 
 class Card {
-  constructor(owner, sp, i) {
+  constructor(owner, sp, i, volley) {
+    this.volley = volley; // estado compartido de la ráfaga: solo impacta un cartón
     const p = sp.params;
     this.owner = owner;
     this.sp = sp;
@@ -65,10 +65,11 @@ class Card {
     const h = this.size / 2 + 4;
     const box = { x: this.x - h, y: this.y - h, w: h * 2, h: h * 2 };
     const p = this.sp.params;
-    const hit = world.tryHit(this.owner, world.opponentOf(this.owner), box, specialHit(this.sp, {
+    const hit = !this.volley.hit && world.tryHit(this.owner, world.opponentOf(this.owner), box, specialHit(this.sp, {
       dir: this.dir, dizzy: p.dizzy ?? 2.5, knockback: { x: 380, y: -260 }, hitstun: 0.4,
     }));
     if (hit) {
+      this.volley.hit = true;
       this.dead = true;
       world.fx.ring(this.x, this.y, '#ffffff', 80, 0.3);
       for (const c of p.colors || COLORS) world.fx.debris(this.x, Math.min(this.y, -4), 2, c, 420);
@@ -90,13 +91,13 @@ const throwEnd = (p) => p.startup + ((p.count || 4) - 1) * (p.interval || 0.09);
 export default {
   start(f, sp, world, a) {
     a.s.thrown = 0;
-    if (sp.params.say) world.spawn(new SpeechBubble(f, sp.params.say, sp.params.startup + 0.9));
+    a.s.volley = { hit: false };
   },
   update(f, sp, world, dt, a) {
     const p = sp.params;
     const count = p.count || 4;
     while (a.s.thrown < count && a.t >= p.startup + a.s.thrown * (p.interval || 0.09)) {
-      world.spawn(new Card(f, sp, a.s.thrown));
+      world.spawn(new Card(f, sp, a.s.thrown, a.s.volley));
       a.s.thrown++;
       sfx.swing();
       if (a.s.thrown === 1) world.camera.shake(4);

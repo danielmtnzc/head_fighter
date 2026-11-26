@@ -24,7 +24,7 @@ export default {
     type: 'shotgun',
     damage: 20,
     cooldown: 8,
-    params: { startup: 0.5, recovery: 0.45, speed: 1350, radius: 14 },
+    params: { say: '¡Tiro al pato!', startup: 0.5, recovery: 0.45, speed: 1350, radius: 14 },
     fx: { color: '#ff9f45', color2: '#fff3a8', text: '¡PREMIO!' },
     ai: { min: 140, max: 800 },
   },

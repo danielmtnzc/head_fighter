@@ -24,7 +24,7 @@ export default {
     type: 'dash',
     damage: 22,
     cooldown: 8,
-    params: {
+    params: { say: '¡Cabeza de hierro!',
       startup: 0.5, speed: 820, duration: 0.65, recovery: 0.4, run: true,
       form: {
         head: { type: 'armor', size: 1 },

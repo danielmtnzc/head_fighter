@@ -18,7 +18,7 @@ export default {
     type: 'dash',
     damage: 20,
     cooldown: 7,
-    params: { startup: 0.28, speed: 1250, duration: 0.3, recovery: 0.3 },
+    params: { say: '¡A que no me pillas!', startup: 0.28, speed: 1250, duration: 0.3, recovery: 0.3 },
     fx: { color: '#ffe45c', color2: '#7df9ff', text: '¡ZAS!', trail: 'bolt' },
     ai: { min: 150, max: 430 },
   },

@@ -220,16 +220,24 @@ h2 { font-size: 3.6rem; color: var(--yellow); -webkit-text-stroke: .5rem var(--i
 .vs-badges .badge { font-size: 1.5rem; }
 .sel-main { flex: 1; min-height: 0; display: flex; gap: .6rem; align-items: center; }
 .sel-side[data-side="1"] .sel-main { flex-direction: row-reverse; }
-.preview { display: block; height: 100%; width: auto; aspect-ratio: 7 / 8; max-width: 13rem; object-fit: contain; }
-.info { flex: 1; min-width: 0; }
-.info .nm { font-size: 3rem; line-height: 1; color: var(--c); -webkit-text-stroke: .4rem var(--ink); paint-order: stroke fill; }
-.info .tag { font-family: system-ui, sans-serif; font-weight: 600; letter-spacing: 0; font-size: 1.1rem; line-height: 1.2; opacity: .85; margin-bottom: .3rem; }
-.stat { display: flex; align-items: center; gap: .4rem; font-size: 1.15rem; line-height: 1.2; }
-.stat span { width: 6.6rem; }
-.stat i { flex: 1; height: .7rem; background: #0007; border-radius: .35rem; overflow: hidden; }
-.stat i b { display: block; height: 100%; background: var(--c); border-radius: .35rem; }
-.info .sp { margin-top: .4rem; font-size: 1.4rem; color: var(--yellow); line-height: 1.1; }
-.info .spd { font-family: system-ui, sans-serif; font-weight: 500; letter-spacing: 0; font-size: 1.05rem; opacity: .85; line-height: 1.2; }
+.preview { display: block; height: 100%; width: auto; aspect-ratio: 7 / 8; max-width: 11.5rem; object-fit: contain; }
+.info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .35rem; }
+.info .nm { font-size: 3.6rem; line-height: .95; color: var(--c); -webkit-text-stroke: .45rem var(--ink); paint-order: stroke fill; }
+.info .tag {
+  font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0; font-size: 1.5rem; line-height: 1.2; color: #fff;
+  text-shadow: 0 .12rem .2rem #000a;
+}
+/* estadísticas en dos columnas: etiqueta encima y barra debajo, así caben con letra grande */
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: .35rem .9rem; }
+.stat { display: flex; flex-direction: column; gap: .15rem; font-size: 1.55rem; line-height: 1; color: #fff; }
+.stat i { height: .85rem; background: #0008; border-radius: .45rem; overflow: hidden; box-shadow: inset 0 0 0 .1rem #fff2; }
+.stat i b { display: block; height: 100%; background: var(--c); border-radius: .45rem; }
+.info .sp { margin-top: .2rem; font-size: 2rem; color: var(--yellow); line-height: 1; -webkit-text-stroke: .3rem var(--ink); paint-order: stroke fill; }
+.info .spd {
+  font-family: system-ui, sans-serif; font-weight: 600; letter-spacing: 0; font-size: 1.35rem; line-height: 1.25; color: #fff; opacity: .95;
+  text-shadow: 0 .12rem .2rem #000a;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+}
 /* una sola fila; si no caben se desliza con el dedo (flechas en los lados con más retratos) */
 .picks-wrap { position: relative; flex: none; }
 .picks { display: flex; gap: .4rem; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; padding: .4rem; margin: -.4rem; }
