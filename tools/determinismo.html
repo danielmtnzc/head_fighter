@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Head Fighter · prueba de determinismo</title>
+  <style>
+    body { font: 16px system-ui, sans-serif; margin: 20px; background: #1a1026; color: #fff; }
+    #hash { font: bold 40px ui-monospace, monospace; color: #ffd23f; }
+  </style>
+</head>
+<body>
+  <h1>Prueba de determinismo</h1>
+  <p id="estado">Cargando…</p>
+  <p id="hash"></p>
+  <p>El número final debe ser el mismo que da <code>node tools/sim.mjs</code> y el mismo en todos los dispositivos.</p>
+  <script type="module">
+    import { PAIRS, runBattle, hex } from './harness.js';
+    import { mix, HASH_START } from '../src/net/checksum.js';
+
+    const estado = document.getElementById('estado');
+    let total = HASH_START;
+    let i = 0;
+    const next = () => {
+      const t0 = performance.now();
+      while (i < PAIRS.length && performance.now() - t0 < 50) total = mix(total, runBattle(i++).hash);
+      estado.textContent = `Combate ${i} de ${PAIRS.length}`;
+      if (i < PAIRS.length) return setTimeout(next);
+      estado.textContent = `Terminado: ${PAIRS.length} combates`;
+      document.getElementById('hash').textContent = hex(total);
+    };
+    try {
+      next();
+    } catch (e) {
+      estado.textContent = `Error: ${e.message}`;
+    }
+    window.addEventListener('error', (e) => (estado.textContent = `Error: ${e.message}`));
+  </script>
+</body>
+</html>

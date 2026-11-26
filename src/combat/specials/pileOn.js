@@ -44,6 +44,7 @@ class Jumper {
     b.facing = this.dir;
     b.x = this.x;
     b.onGround = false;
+    b.animT = i * 0.7;
     b.expression = () => (this.landT < 0 ? 'attack' : 'win');
     b.animName = () => (this.landT < 0 ? (this.k < 0.45 ? 'jumpUp' : 'slamDown') : this.t - this.landT < 0.55 ? 'win' : 'headRun');
     this.body = b;

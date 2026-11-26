@@ -9,6 +9,7 @@ import { sfx } from '../../engine/audio.js';
 
 const sprites = new Map();
 function sprite(src) {
+  if (typeof Image === 'undefined') return null; // fuera del navegador (pruebas) no se dibuja
   if (!sprites.has(src)) {
     const img = new Image();
     img.src = src;

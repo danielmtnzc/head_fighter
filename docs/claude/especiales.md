@@ -32,6 +32,8 @@ Las entidades con `behind: true` se dibujan antes que los luchadores (`Match.dra
 
 ## Crear un tipo nuevo
 
+Regla de determinismo (ver `arquitectura.md`): lo que afecte a la partida usa `world.rng.next()` / `world.rng.range(a, b)`; `rand()` solo para efectos y dibujo (vaivenes y giros se calculan en `draw`). Después, `node tools/sim.mjs`.
+
 Un tipo exporta por defecto:
 
 ```js

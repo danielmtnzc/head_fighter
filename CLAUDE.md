@@ -15,4 +15,4 @@ Idioma del proyecto: español (textos, comentarios y documentación).
 - docs/claude/interfaz.md — pantallas, HUD, controles táctiles y de teclado, escenario.
 - docs/claude/soluciones.md — registro de bugs difíciles ya resueltos.
 - docs/online.md — investigación (sin implementar) para partidas online: WebRTC P2P, lockstep, Cloudflare Worker, costes.
-- docs/online-plan.md — plan por fases del modo online, pendiente de aprobación; manda sobre online.md.
+- docs/online-plan.md — plan por fases del modo online (aprobado, en curso); manda sobre online.md.

@@ -36,7 +36,7 @@ function drawCard(ctx, size, color) {
 }
 
 class Card {
-  constructor(owner, sp, i, volley) {
+  constructor(world, owner, sp, i, volley) {
     this.volley = volley; // estado compartido de la ráfaga: solo impacta un cartón
     const p = sp.params;
     this.owner = owner;
@@ -45,20 +45,24 @@ class Card {
     this.size = p.size || 26;
     this.color = (p.colors || COLORS)[i % (p.colors || COLORS).length];
     this.x = owner.x + owner.facing * (p.spawnX ?? 50);
-    this.y0 = owner.y + (p.spawnY ?? -72) + (i % 2 ? 1 : -1) * rand(0, p.spread ?? 12);
+    this.y0 = owner.y + (p.spawnY ?? -72) + (i % 2 ? 1 : -1) * world.rng.range(0, p.spread ?? 12);
     this.y = this.y0;
     this.vx = owner.facing * (p.speed || 760);
     this.t = 0;
-    this.phase = rand(0, Math.PI * 2);
+    this.phase = rand(0, Math.PI * 2); // vaivén, solo visual
     this.rot = rand(0, Math.PI);
     this.dangerous = true;
     this.dead = false;
   }
 
+  /** Si la ráfaga ya ha impactado (lo lee la suma de comprobación). */
+  get hit() {
+    return this.volley.hit;
+  }
+
   update(dt, world) {
     this.t += dt;
     this.x += this.vx * dt;
-    this.y = this.y0 + Math.sin(this.t * 14 + this.phase) * 5;
     this.rot += 14 * dt * this.dir;
     if (Math.random() < 0.5) world.fx.glow(this.x - this.dir * 10, this.y + rand(-8, 8), this.color, rand(4, 8), 0.25, -this.vx * 0.1, rand(-30, 30));
 
@@ -79,7 +83,7 @@ class Card {
 
   draw(ctx) {
     ctx.save();
-    ctx.translate(this.x, this.y);
+    ctx.translate(this.x, this.y + Math.sin(this.t * 14 + this.phase) * 5);
     ctx.rotate(this.rot);
     drawCard(ctx, this.size, this.color);
     ctx.restore();
@@ -97,7 +101,7 @@ export default {
     const p = sp.params;
     const count = p.count || 4;
     while (a.s.thrown < count && a.t >= p.startup + a.s.thrown * (p.interval || 0.09)) {
-      world.spawn(new Card(f, sp, a.s.thrown, a.s.volley));
+      world.spawn(new Card(world, f, sp, a.s.thrown, a.s.volley));
       a.s.thrown++;
       sfx.swing();
       if (a.s.thrown === 1) world.camera.shake(4);

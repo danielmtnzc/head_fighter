@@ -1,6 +1,6 @@
 # Plan del modo online
 
-Estado: **pendiente de aprobación**, nada implementado. La investigación previa está en `online.md`; donde difieran, manda este plan.
+Estado: **aprobado**; F0, F1 (probada en PC y móvil) y F2 hechas en la rama `online`. Siguiente: F3. La investigación previa está en `online.md`; donde difieran, manda este plan.
 
 ## Decisiones confirmadas
 
@@ -44,7 +44,9 @@ Regla nueva: `world.rng` para lo que afecte a la partida, `rand()` solo para efe
 ## Partida
 
 - Dos canales: `ctl` (fiable y ordenado) e `inp` (sin orden ni reenvíos).
-- `inp`: `[tipo][ack][primerFrame][n][n × (x, botones)]` con los mandos sin confirmar (máx. 64). Cada 30 fotogramas, suma de comprobación; cada segundo, ping.
+- Los botones viajan como pulsaciones de ese fotograma (no «mantenido»); solo `x` es continua.
+- `inp`: `[tipo][partida][ack][primerFrame][n][n × (x, botones)][frame][hash]` con los mandos sin confirmar (máx. 64) y la última suma de comprobación (cada 30 fotogramas y al acabar).
+- F4: `empezar` lleva además `matchId` (contador por revancha); cada combate crea su `LockstepSession` y cierra la anterior. Seguir llamando a `update()` hasta `finished` y un segundo más (con tope de 2 s) antes de mandar `fin`. Ping cada segundo como paquete propio por `inp` (otro byte de tipo; `receive` devuelve `false` y `peer.js` lo atiende). Canal con `binaryType = 'arraybuffer'`; no enviar si no está abierto o `bufferedAmount` se acumula. «Conexión perdida» se decide con `sinceRecv`. Si hay muchas esperas, valorar un fotograma más de retraso.
 - `ctl`: `hola{v, rosterHash}` (rechaza versiones distintas), `pick`, `listo`, `empezar{seed, delay, picks}`, `preparado`, `fin`, `revancha`, `cambiar`, `ausente`, `vuelvo`, `adios`, `desync`.
 - Anfitrión = J1 a la izquierda; el invitado controla el lado 1. El HUD marca «TÚ».
 - El anfitrión genera la semilla con `crypto.getRandomValues`. Retraso `D = clamp(ceil(RTT/2/16.7)+1, 2, 7)`, medido en la selección; los primeros D fotogramas llevan mandos neutros.
@@ -71,8 +73,8 @@ Regla nueva: `world.rng` para lo que afecte a la partida, `rand()` solo para efe
 - iOS puede cortar WebRTC en segundo plano; en bajo consumo limita el juego a 30 fotogramas.
 - Divergencias ocultas en algún especial: las buscan `sim.mjs` y la prueba PC contra iPhone.
 
-## Por decidir
+## Decidido al aprobar
 
-1. TURN si Cloudflare pide tarjeta: ponerla, usar Metered Open Relay (20 GB/mes) o quedarse con STUN.
-2. Lados: anfitrión a la izquierda con «TÚ» (recomendado) o cada uno se ve a la izquierda (más trabajo).
-3. Abandono: 30 s fuera equivalen a victoria del que se queda.
+1. TURN en Cloudflare; si pide tarjeta y no se quiere dar, empezar solo con STUN (alternativa: Metered Open Relay, 20 GB/mes).
+2. Anfitrión a la izquierda e invitado a la derecha, cada uno marcado con «TÚ».
+3. Quien pase 30 s fuera de la app o sin conexión pierde.

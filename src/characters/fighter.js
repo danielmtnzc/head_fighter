@@ -36,7 +36,7 @@ export class Fighter {
     this.invulnT = 0;
     this.dizzyT = 0; // mareado: controles invertidos y más lento
     this.flashT = 0;
-    this.animT = Math.random() * 3;
+    this.animT = this.side * 1.5; // desfasa la animación de los dos
     this.walkPhase = 0;
     this.intro = false;
     this.buf = { jump: 0, punch: 0, kick: 0, special: 0 };
@@ -55,14 +55,15 @@ export class Fighter {
     return !this.action && this.state === 'idle';
   }
 
-  update(dt, world) {
+  /** @param input mandos de este paso: { x, jump, punch, kick, special } */
+  update(dt, world, input = NEUTRAL) {
     this.animT += dt;
     this.invulnT = Math.max(0, this.invulnT - dt);
     this.flashT = Math.max(0, this.flashT - dt);
     this.dizzyT = Math.max(0, this.dizzyT - dt);
 
     const live = world.phase === 'fight';
-    let inp = live && this.controller && this.state !== 'ko' ? this.controller.poll(this, world) : NEUTRAL;
+    let inp = live && this.state !== 'ko' ? input : NEUTRAL;
     if (this.dizzyT > 0) inp = { ...inp, x: -inp.x * DIZZY_SPEED };
     for (const k in this.buf) this.buf[k] = inp[k] ? BUFFER : Math.max(0, this.buf[k] - dt);
     if (live) this.energy = Math.min(100, this.energy + (100 / this.cfg.special.cooldown) * dt);

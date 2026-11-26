@@ -1,6 +1,7 @@
 // Un combate: es el "mundo" que comparten luchadores, proyectiles, efectos y cámara.
 // Fases: intro → countdown → fight → ko → over
 import { STEP, ROUND_TIME, rand } from '../config.js';
+import { createRng, randomSeed } from '../net/rng.js';
 import { Fighter } from '../characters/fighter.js';
 import { drawFighter, drawShadow } from '../characters/fighterRenderer.js';
 import { integrate, separate } from '../physics/physics.js';
@@ -10,6 +11,8 @@ import { Camera } from './camera.js';
 import { sfx } from './audio.js';
 
 const HIT_WORDS = ['¡ZAS!', '¡PUM!', '¡PAF!', '¡TOMA!', '¡CRAC!'];
+const noInput = () => ({ x: 0, jump: false, punch: false, kick: false, special: false });
+const BUTTONS = ['jump', 'punch', 'kick', 'special'];
 
 export class Match {
   /**
@@ -18,11 +21,16 @@ export class Match {
    * @param stage       escenario
    * @param hooks       { onBanner(text, kind), onDamage(side), onEnd(result) }
    * @param silent      modo demostración (sin sonido ni rótulos)
+   * @param seed        semilla del azar de la partida (la misma en los dos lados al jugar online)
    */
-  constructor({ cfgs, controllers, stage, hooks = {}, silent = false }) {
+  constructor({ cfgs, controllers = [], stage, hooks = {}, silent = false, seed = randomSeed() }) {
     this.stage = stage;
     this.hooks = hooks;
     this.silent = silent;
+    this.rng = createRng(seed); // todo azar que afecte a la partida sale de aquí
+    this.frame = 0; // ticks ejecutados
+    this.slow = 0; // fracción de paso acumulada durante la cámara lenta
+    this.latch = [noInput(), noInput()]; // mandos que cada luchador aún no ha leído
     this.fighters = cfgs.map((c, i) => new Fighter(c, i));
     this.fighters.forEach((f, i) => {
       f.controller = controllers[i];
@@ -108,14 +116,46 @@ export class Match {
     }
   }
 
-  /** Avanza el combate con paso fijo. realDt en segundos. */
+  /** Avanza el combate en tiempo real, un tick por cada 1/60 s. realDt en segundos. */
   advance(realDt) {
-    this.acc += Math.min(realDt, 0.1) * this.timeScale;
+    this.acc += Math.min(realDt, 0.1);
     let n = 0;
     while (this.acc >= STEP && n++ < 8) {
-      this.step(STEP);
+      this.tick();
       this.acc -= STEP;
     }
+  }
+
+  /**
+   * Un fotograma de 1/60 s. El resultado depende solo del estado y de los mandos.
+   * @param inputs [mandosP1, mandosP2] de este fotograma; sin ellos se consultan los controladores
+   */
+  tick(inputs) {
+    this.readInputs(inputs);
+    // en cámara lenta no todos los ticks llegan a dar un paso
+    this.slow += this.timeScale;
+    while (this.slow >= 1) {
+      this.slow -= 1;
+      this.step(STEP);
+    }
+    this.frame++;
+  }
+
+  /** Guarda los mandos hasta que los luchadores los lean (durante el hitstop no se mueven). */
+  readInputs(inputs) {
+    this.fighters.forEach((f, i) => {
+      if (this.phase !== 'fight' || f.state === 'ko') {
+        this.latch[i] = noInput();
+        return;
+      }
+      // los controladores locales ya retienen las pulsaciones: no se consultan en pleno hitstop
+      if (!inputs && this.hitstop > 0) return;
+      const inp = inputs ? inputs[i] : f.controller?.poll(f, this);
+      if (!inp) return;
+      const l = this.latch[i];
+      l.x = inp.x;
+      for (const b of BUTTONS) l[b] ||= inp[b];
+    });
   }
 
   step(dt) {
@@ -148,7 +188,12 @@ export class Match {
       return;
     }
 
-    for (const f of this.fighters) f.update(dt, this);
+    // el orden se alterna para que ningún jugador gane siempre los golpes simultáneos
+    for (const i of this.frame & 1 ? [1, 0] : [0, 1]) {
+      const inp = this.latch[i];
+      this.latch[i] = { ...noInput(), x: inp.x };
+      this.fighters[i].update(dt, this, inp);
+    }
     for (const f of this.fighters) {
       const ev = integrate(f, dt);
       if (ev) f.onLand(this, ev === 'bounce');

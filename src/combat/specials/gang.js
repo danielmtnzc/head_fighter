@@ -35,6 +35,7 @@ class Runner {
     b.facing = this.dir;
     b.x = this.x;
     b.walkPhase = i * 1.7;
+    b.animT = i * 0.7;
     b.expression = () => 'attack';
     b.animName = () => (this.punchT > 0 ? 'flurryA' : 'headRun');
     this.body = b;
