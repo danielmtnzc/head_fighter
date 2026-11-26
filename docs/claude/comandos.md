@@ -4,7 +4,7 @@
 - En Claude: configuración `la-quinta-del-buitre` de `.claude/launch.json`.
 - No hay build, ni paquetes, ni tests automáticos. Los módulos ES necesitan servidor: abrir `index.html` con `file://` no funciona.
 - Probar en el móvil: mismo wifi y abrir `http://<IP-del-PC>:5173` en horizontal (el servidor escucha en 0.0.0.0).
-- Publicar: es estático; vale cualquier hosting de archivos (GitHub Pages, Netlify…).
+- Publicar: GitHub Pages sirve la rama `gh-pages`, que monta `.github/workflows/pages.yml` en cada push. `main` queda en la raíz y cada otra rama en `/ramas/<rama>/` (las `/` del nombre pasan a `-`); `/ramas/` lista todas. Para probar algo sin tocar la versión estable: trabajar en una rama, subirla y abrir su URL; al fusionar en `main` y borrar la rama, desaparece de `/ramas/`. Las rutas del juego deben seguir siendo relativas para que funcione en subcarpetas.
 
 ## Depuración
 

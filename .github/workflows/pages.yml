@@ -1,0 +1,58 @@
+# Publica el juego en GitHub Pages:
+#   main            -> https://<usuario>.github.io/head_fighter/
+#   cualquier rama  -> https://<usuario>.github.io/head_fighter/ramas/<rama>/
+# (en el nombre de la rama, las "/" se cambian por "-").
+# Monta el sitio entero en la rama gh-pages, que es la que sirve Pages.
+name: Publicar en GitHub Pages
+
+on:
+  push:
+    branches-ignore: [gh-pages]
+  delete:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Montar el sitio (main en la raíz y cada rama en ramas/)
+        run: |
+          set -e
+          rm -rf _site && mkdir -p _site/ramas
+          git archive origin/main | tar -x -C _site
+          lista=""
+          for ref in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin); do
+            rama="${ref#origin/}"
+            case "$rama" in main|gh-pages|HEAD|origin) continue ;; esac
+            carpeta="${rama//\//-}"
+            mkdir -p "_site/ramas/$carpeta"
+            git archive "$ref" | tar -x -C "_site/ramas/$carpeta"
+            lista="$lista<li><a href=\"$carpeta/\">$rama</a></li>"
+          done
+          [ -z "$lista" ] && lista="<li>No hay ramas de prueba.</li>"
+          cat > _site/ramas/index.html <<EOF
+          <!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+          <title>Head Fighter · ramas</title>
+          <h1>Ramas de prueba</h1><ul>$lista</ul><p><a href="../">Versión estable (main)</a></p>
+          EOF
+          touch _site/.nojekyll
+
+      - name: Subir a la rama gh-pages
+        run: |
+          cd _site
+          git init -q -b gh-pages
+          git add -A
+          git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com \
+            commit -qm "Publica ${GITHUB_SHA::7}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
