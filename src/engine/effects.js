@@ -78,8 +78,7 @@ export class Effects {
     this.add({ type: 'bolt', pts, life, max: life, color, x: 0, y: 0 });
   }
 
-  /** Texto cómic: ¡ZAS!, ¡PAM!... */
-  /** Palabra de cómic que sube y se desvanece. life = segundos en pantalla. */
+  /** Texto cómic (¡ZAS!, ¡PAM!...) que sube y se desvanece. life = segundos en pantalla. */
   text(x, y, str, color = '#ffd23f', size = 44, life = 0.75, rot = rand(-0.25, 0.25)) {
     this.texts.push({ x, y, str, color, size, life, max: life, rot });
   }
@@ -168,7 +167,7 @@ export class Effects {
         }
         case 'drop': {
           // gota opaca con contorno
-          ctx.globalAlpha = Math.min(1, t.life / 0.25);
+          ctx.globalAlpha = Math.min(1, k * 3);
           ctx.fillStyle = p.color;
           ctx.strokeStyle = OUTLINE;
           ctx.lineWidth = 1.5;
@@ -250,14 +249,13 @@ export class Effects {
     }
 
     for (const t of this.texts) {
-      const k = t.life / t.max;
       const age = t.max - t.life; // el «pop» de entrada dura lo mismo sea cual sea la vida
       const pop = age < 0.15 ? 1 + (0.15 - age) * 5.3 : 1;
       ctx.save();
       ctx.translate(t.x, t.y);
       ctx.rotate(t.rot);
       ctx.scale(pop, pop);
-      ctx.globalAlpha = Math.min(1, k * 3);
+      ctx.globalAlpha = Math.min(1, t.life / 0.25);
       ctx.font = `${t.size}px ${FONT}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
