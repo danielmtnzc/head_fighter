@@ -92,7 +92,7 @@ La cabeza tapa buena parte del torso, así que las diferencias deben exagerarse 
 ## 5. Comprobar
 
 1. Las cinco expresiones en grande (`idle`, `attack`, `hurt`, `ko`, `win`) y el tamaño real en selección, VS y combate.
-2. El superataque de cerca, a media distancia y de lejos, y que la consola no dé errores.
+2. El superataque de cerca, a media distancia y de lejos, y que la consola no dé errores. Que se pueda esquivar de verdad: un rival que se aparta en cuanto lo ve venir no debe recibir daño (los ataques que persiguen al rival hasta casi el impacto no se pueden esquivar). Si al hacerlo esquivable el personaje queda débil, compensar con sus estadísticas.
 3. Equilibrio: 30 combates IA contra IA por rival (ver docs/claude/comandos.md); objetivo global del 45 al 58 % de victorias.
 4. Añadir el personaje a la tabla de docs/claude/personajes.md.
 

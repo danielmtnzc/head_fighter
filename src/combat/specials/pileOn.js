@@ -1,10 +1,10 @@
 // ESPECIAL: MONTONERA. Grita (bocadillo) y sus colegas entran saltando desde los dos lados
-// de la pantalla y caen en plancha, uno tras otro, sobre el rival (le siguen hasta poco
-// antes de caer). Una sombra marca dónde caen: se esquiva saliendo de ahí en el último momento. Al caer celebran y se van.
+// de la pantalla y caen en plancha, uno tras otro, sobre el sitio donde estaba el rival al
+// llamarlos. Ese sitio queda fijo y una sombra lo marca: se esquiva saliendo de ahí antes de
+// que caiga el primero (`flight` s). Al caer celebran y se van.
 // A diferencia de `gang` (corren por el suelo y se saltan), aquí vienen por el aire.
 // params: startup, recovery, interval (s entre saltos), flight (s en el aire), height (altura
 //         del salto), spread (separación de los aterrizajes), width (zona de golpe),
-//         lock (fracción del vuelo en la que dejan de seguir al rival),
 //         finisher (fracción del daño del último), crew: [{ art?, body?, size? }]
 import { STAGE, clamp } from '../../config.js';
 import { Fighter } from '../../characters/fighter.js';
@@ -31,7 +31,6 @@ class Jumper {
     const side = this.last ? -owner.facing : i % 2 ? 1 : -1;
     this.x0 = side > 0 ? STAGE.right + 90 : STAGE.left - 90;
     const off = this.last ? 0 : ((i % 2 ? 1 : -1) * (p.spread ?? 26) * (1 + Math.floor(i / 2))) / 2;
-    this.off = off;
     this.tx = clamp(tx + off, STAGE.left + 30, STAGE.right - 30);
     this.dir = this.tx >= this.x0 ? 1 : -1;
     this.delay = i * (p.interval ?? 0.16);
@@ -61,11 +60,6 @@ class Jumper {
     if (this.landT < 0) {
       this.k = Math.min(1, (this.t - this.delay) / T);
       const k = this.k;
-      // corrigen el rumbo hacia el rival hasta poco antes de caer; luego ya no
-      if (k < (p.lock ?? 0.6)) {
-        const want = clamp(world.opponentOf(this.owner).x + this.off, STAGE.left + 30, STAGE.right - 30);
-        this.tx += clamp(want - this.tx, -360 * dt, 360 * dt);
-      }
       this.x = this.x0 + (this.tx - this.x0) * k;
       this.y = -4 * (p.height ?? 260) * k * (1 - k);
       if (k >= 1) this.land(world);
