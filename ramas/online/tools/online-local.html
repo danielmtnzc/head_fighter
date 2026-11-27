@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Head Fighter · dos jugadores online en una pantalla</title>
+  <style>
+    html, body { height: 100%; margin: 0; background: #000; }
+    body { display: flex; flex-direction: column; gap: 4px; }
+    iframe { flex: 1; width: 100%; border: 0; }
+  </style>
+</head>
+<body>
+  <!-- Dos juegos a la vez para probar el online en una sola ventana (con el servidor de salas
+       arrancado). El teclado va al que tenga el foco: haz clic en él. -->
+  <iframe src="../index.html?debug=1" title="Jugador 1"></iframe>
+  <iframe src="../index.html?debug=1" title="Jugador 2"></iframe>
+</body>
+</html>

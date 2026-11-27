@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Head Fighter · lockstep en local</title>
+  <style>
+    body { font: 14px system-ui, sans-serif; margin: 12px; background: #1a1026; color: #fff; }
+    .vistas { display: flex; flex-wrap: wrap; gap: 8px; }
+    figure { margin: 0; flex: 1 1 420px; }
+    canvas { width: 100%; aspect-ratio: 16 / 9; display: block; }
+    label { margin-right: 16px; white-space: nowrap; }
+    input[type=number] { width: 5em; }
+    pre { font-size: 14px; }
+    .mal { color: #ff6b6b; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <p>
+    Dos «dispositivos» unidos por una red de mentira. El de la izquierda lo manejas tú
+    (A D mover · W salto · J puño · K patada · L especial); en el de la derecha juega la IA.
+  </p>
+  <p>
+    <label>Latencia de ida (ms) <input id="latency" type="number" value="80" min="0"></label>
+    <label>Variación ± (ms) <input id="jitter" type="number" value="30" min="0"></label>
+    <label>Pérdida (%) <input id="loss" type="number" value="20" min="0" max="90"></label>
+    <button id="nuevo">Nuevo combate</button>
+  </p>
+  <div class="vistas">
+    <figure><canvas width="960" height="540"></canvas><figcaption>Dispositivo 1 (tú)</figcaption></figure>
+    <figure><canvas width="960" height="540"></canvas><figcaption>Dispositivo 2 (IA)</figcaption></figure>
+  </div>
+  <pre id="datos"></pre>
+
+  <script type="module">
+    import { Match } from '../src/engine/match.js';
+    import { ROSTER } from '../src/characters/roster.js';
+    import { preloadHeads } from '../src/characters/heads.js';
+    import { KeyboardController, SCHEMES } from '../src/input/keyboard.js';
+    import { AIController } from '../src/ai/ai.js';
+    import { LockstepSession, delayFor } from '../src/net/lockstep.js';
+    import { randomSeed } from '../src/net/rng.js';
+    import azotea from '../src/stages/azotea.js';
+    import { createFakeLink } from './fakeNet.js';
+
+    preloadHeads(ROSTER);
+    const $ = (id) => document.getElementById(id);
+    const canvases = [...document.querySelectorAll('canvas')];
+    const view = () => ({ w: 960, h: 540, scale: 1, groundY: 540 * 0.8 });
+    const views = [view(), view()];
+    let link;
+    let peers;
+
+    const readNet = () => ({ latency: +$('latency').value, jitter: +$('jitter').value, loss: $('loss').value / 100 });
+
+    function start() {
+      link = createFakeLink(readNet());
+      const delay = delayFor(link.opts.latency * 2);
+      const seed = randomSeed();
+      const pick = () => ROSTER[Math.floor(Math.random() * ROSTER.length)];
+      const cfgs = [pick(), pick()];
+      const controllers = [new KeyboardController(SCHEMES.p1), new AIController(1)];
+      peers = [0, 1].map((side) => {
+        const match = new Match({ cfgs, stage: azotea, silent: true, seed });
+        match.startCountdown();
+        const session = new LockstepSession({
+          match,
+          localSide: side,
+          delay,
+          transport: side ? link.b : link.a,
+          poll: (f, m) => controllers[side].poll(f, m),
+        });
+        return { match, session };
+      });
+    }
+
+    for (const id of ['latency', 'jitter', 'loss']) $(id).addEventListener('input', () => Object.assign(link.opts, readNet()));
+    $('nuevo').addEventListener('click', (e) => {
+      e.target.blur();
+      start();
+    });
+
+    let last = performance.now();
+    function frame(now) {
+      const dt = Math.min(0.1, (now - last) / 1000);
+      last = now;
+      link.advance(dt * 1000);
+      peers.forEach((p, i) => {
+        p.session.update(dt);
+        p.match.draw(canvases[i].getContext('2d'), views[i]);
+      });
+      $('datos').textContent = peers
+        .map(({ match, session: s }, i) => {
+          const sync = s.desync ? `¡DESINCRONIZADO en el ${s.desync.frame}!` : 'sincronizado';
+          return `Dispositivo ${i + 1}: fotograma ${match.frame} · fase ${match.phase} · retraso ${s.delay} · esperas ${s.stalls} · ${sync}`;
+        })
+        .join('\n');
+      $('datos').classList.toggle('mal', peers.some((p) => p.session.desync));
+      requestAnimationFrame(frame);
+    }
+
+    start();
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Fotos originales de los amigos: no se suben nunca
+assets/heads/*.png
+assets/heads/*.jpg
+assets/heads/*.jpeg
+assets/heads/*.webp
+assets/heads/*.heic
+
+# Servidor de salas: dependencias, estado local y secretos
+worker/node_modules/
+.wrangler/
+worker/.dev.vars
