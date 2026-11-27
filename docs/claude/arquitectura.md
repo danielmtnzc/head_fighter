@@ -27,9 +27,11 @@ src/input/                    keyboard.js (dos esquemas), touch.js (joystick + b
 src/ai/ai.js                  IA del rival
 src/stages/azotea.js          escenario
 src/ui/hud.js, select.js      HUD y pantalla de selección
+src/ui/lobby.js               pantalla online (crear o unirse a una sala)
 src/net/                      modo online (en construcción): rng.js (azar con semilla), checksum.js (hash del estado),
                               inputCodec.js (mandos en 2 bytes), lockstep.js (sesión sincronizada; usa cualquier transporte { send, onMessage }),
-                              signaling.js (cliente de las salas), config.js (versión de protocolo y URL del Worker)
+                              signaling.js (cliente de las salas), config.js (versión de protocolo y URL del Worker),
+                              peer.js (WebRTC: canales ctl e inp), online.js (flujo de una partida: sala → conexión → combate)
 worker/                       Cloudflare Worker + Durable Object de las salas (no se publica en Pages)
 tools/                        pruebas: determinismo (harness.js, sim.mjs, determinismo.html), lockstep (fakeNet.js, red-sim.mjs, red-local.html) y salas (worker-test.mjs)
 ```
@@ -45,4 +47,5 @@ tools/                        pruebas: determinismo (harness.js, sim.mjs, determ
 - **Mundo**: `Match` es el `world` que reciben luchadores, especiales y entidades. Ofrece `opponentOf(f)`, `spawn(entidad)`, `tryHit(att, def, box, spec)`, `fx`, `camera`, `entities`, `phase`. Una entidad es `{update(dt, world), draw(ctx), dead, owner, dangerous, x, vx}`.
 - **Hooks de `Match`** hacia la interfaz: `onBanner(texto, tipo)`, `onDamage(lado)`, `onEnd(resultado)`. Con `silent: true` no suena (combate de demostración de fondo en los menús).
 - **Animación por poses**: `Fighter.animName()` da el nombre de la pose según el estado; `poses.js` devuelve la pose objetivo y `animate()` interpola hacia ella. El renderer apoya en el suelo el pie más bajo y dibuja brazo trasero, piernas, torso, cabeza y brazo delantero. Los brazos y piernas se estiran "de goma" (`asF`, `lsF`…) para que los golpes sobrepasen la cabeza.
+- **Online**: `main.js` crea un `OnlineGame` y, llama siempre a `online.update(dt)`; mientras el combate en pantalla sea el suyo, no llama a `match.advance(dt)`. `OnlineGame` no toca el DOM: avisa con `status`, `code`, `screen`, `change` y `end`.
 - **Flujo de pantallas** (`main.js`): `title` → `select` → `vs` → `fight` → `result`. `flowToken` invalida temporizadores y hooks de combates anteriores.

@@ -28,3 +28,12 @@ Táctil (`src/input/touch.js`, Pointer Events, un `pointerId` por dedo): joystic
 Un escenario exporta `drawBackground(ctx, view, cam, t)` (espacio de pantalla, capas con paralaje) y `drawFloor(ctx)` (espacio de mundo). Es procedural. Para añadir otro, crear un archivo con la misma interfaz y pasarlo a `Match` en `main.js`. Los límites de la arena están en `STAGE` (`config.js`).
 
 Zoom en iOS (`src/input/noZoom.js`): Safari ignora `user-scalable=no`, así que se cancelan los toques fuera de los botones de menú, el segundo toque rápido sobre ellos (lanzando el `click` a mano) y el pellizco. Un elemento nuevo que dependa de `click` debe ser un `<button>`, y uno que se deslice necesita `touch-action` propio y una excepción ahí, como `.picks` (fila de retratos de tamaño fijo, 6rem, que se desliza en horizontal con el dedo o la rueda del ratón si no caben).
+
+## Online
+
+- Botón «Jugar online» en el título → `screen-online`: crear sala (muestra el código y «Compartir enlace») o escribirlo; `?sala=ABCD` lo rellena.
+- **Selección**: la misma pantalla que en local (`SelectScreen.setOnline`). Cada uno elige solo su lado (anfitrión izquierda, invitado derecha), ve en directo lo que marca el otro y pulsa «¡Listo!» (se puede cancelar). Al terminar se restaura la elección local.
+- **Combate**: el HUD marca «TÚ». No hay pausa: el botón ✕ (o Escape) pregunta si se quiere salir, con el combate en marcha; salir es perder. `#net` muestra los avisos de conexión y la cuenta de 30 s.
+- **Resultado**: «Revancha» (hacen falta los dos; mismos luchadores), «Cambiar luchadores» (arrastra a los dos a la selección) y «Menú». Si el rival se ha ido solo queda «Menú».
+- Salir de la app o perder la conexión más de 30 s es derrota por abandono. Si los dos llegan a las salas pero no entre sí, no gana nadie.
+- Con `?debug=1` se muestran ida y vuelta, retraso, esperas y sincronía.

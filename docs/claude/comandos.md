@@ -13,7 +13,7 @@
 - `node tools/red-sim.mjs`: lockstep con red de mentira (latencia, pérdida, distintas frecuencias de pantalla); comprueba que ambos lados simulan lo mismo y que una desincronización se detecta.
 - `tools/red-local.html`: dos «dispositivos» en una página, con latencia y pérdida ajustables.
 - Salas (Worker): la primera vez `npm install` dentro de `worker/`. Para probarlas, arrancar la configuración `salas-prueba` de `.claude/launch.json` (puerto 8788, plazos cortos) y ejecutar `node tools/worker-test.mjs`.
-- Jugar online en local (desde F4): configuración `salas` (puerto 8787) o `npm run dev -- --ip 0.0.0.0` en `worker/`. Publicar el Worker: `npx wrangler login` y `npm run deploy` en `worker/`, y poner su URL en `src/net/config.js`.
+- Jugar online en local: configuración `online` de `.claude/launch.json` o `node tools/dev-online.mjs` (juego y salas a la vez). Por separado, `node server.js` y `npm run dev -- --ip 0.0.0.0` en `worker/`. En el móvil, misma wifi y `http://<IP-del-PC>:<puerto>`; el cortafuegos debe permitir Node y `workerd` (puerto 8787). `tools/online-local.html` abre dos jugadores en una ventana (el navegador debe estar visible: oculto no refresca). Publicar el Worker: `npx wrangler login` y `npm run deploy` en `worker/`, y poner su URL en `src/net/config.js`.
 
 ## Depuración
 

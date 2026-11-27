@@ -14,6 +14,7 @@ export const SCHEMES = {
 const GAME_KEYS = new Set(Object.values(SCHEMES).flatMap((s) => Object.values(s).flat()));
 
 window.addEventListener('keydown', (e) => {
+  if (e.target instanceof HTMLInputElement) return; // escribiendo, p. ej. el código de sala
   if (GAME_KEYS.has(e.code)) e.preventDefault();
   if (e.repeat) return;
   down.add(e.code);

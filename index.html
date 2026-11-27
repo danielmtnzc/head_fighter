@@ -45,6 +45,7 @@
   </div>
 
   <div id="banner"></div>
+  <div id="net"></div>
   <div id="hint" class="hidden"></div>
 
   <!-- Controles táctiles -->
@@ -76,6 +77,7 @@
     <div class="logo"><span class="l1">HEAD</span><span class="l2">FIGHTER</span></div>
     <p class="sub">CABEZONES · TORTAS · COLEGAS</p>
     <button id="btn-play" class="btn-big">JUGAR</button>
+    <button id="btn-online" class="btn-small">JUGAR ONLINE</button>
     <div class="corner">
       <button id="btn-full" class="btn-mini" aria-label="Pantalla completa">⛶</button>
       <button id="btn-mute" class="btn-mini" aria-label="Sonido">♪</button>
@@ -95,11 +97,28 @@
     </div>
     <div class="sel-actions">
       <button id="btn-back" class="btn-small">◀ VOLVER</button>
+      <p class="sel-status" role="status"></p>
       <div class="diff">
         <button data-level="0">FÁCIL</button><button data-level="1" class="on">NORMAL</button><button data-level="2">DIFÍCIL</button>
       </div>
       <button id="btn-fight" class="btn-big">¡A PELEAR!</button>
     </div>
+  </section>
+
+  <!-- Partida online: crear o unirse a una sala -->
+  <section id="screen-online" class="screen hidden">
+    <h2>ONLINE</h2>
+    <div class="on-menu">
+      <button id="btn-create" class="btn-big">CREAR SALA</button>
+      <form id="form-join">
+        <input id="room-input" maxlength="4" placeholder="CÓDIGO" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Código de sala">
+        <button type="submit" class="btn-small">UNIRSE</button>
+      </form>
+    </div>
+    <div class="on-room hidden"></div>
+    <button id="btn-share" class="btn-small hidden">COMPARTIR ENLACE</button>
+    <p class="on-status" role="status"></p>
+    <button id="btn-online-back" class="btn-small">◀ VOLVER</button>
   </section>
 
   <!-- Presentación VS -->
@@ -114,6 +133,7 @@
     <div class="res-top">
       <div class="res-title"></div>
       <div class="res-sub"></div>
+      <div class="res-status" role="status"></div>
     </div>
     <div class="res-actions">
       <button id="btn-rematch" class="btn-big">REVANCHA</button>

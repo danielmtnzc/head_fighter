@@ -9,7 +9,7 @@ export function blockZoom() {
 
   // fuera de los botones de menú y de la fila deslizable de retratos no hace falta ningún gesto nativo (los controles usan Pointer Events)
   document.addEventListener('touchstart', (e) => {
-    if (e.cancelable && !menuButton(e.target) && !e.target.closest?.('.picks')) e.preventDefault();
+    if (e.cancelable && !menuButton(e.target) && !e.target.closest?.('.picks, input')) e.preventDefault();
   }, opts);
 
   document.addEventListener('touchend', (e) => {

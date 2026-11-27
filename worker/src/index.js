@@ -14,6 +14,7 @@ import { DurableObject } from 'cloudflare:workers';
 const PROTO = 1;
 const MAX_MESSAGE = 16 * 1024;
 const BURST = { messages: 100, ms: 10_000 };
+const FRESH_MS = 20_000; // el cliente manda un ping cada 8 s
 const TURN_TTL = 3600; // segundos de vida de las credenciales
 const TURN_REUSE_MS = 30 * 60_000; // se reutilizan mientras les quede al menos otro tanto
 const STUN = { urls: ['stun:stun.cloudflare.com:3478'] };
@@ -173,7 +174,10 @@ export class Room extends DurableObject {
     const now = Date.now();
     let room = await this.ctx.storage.get('room');
     if (room) this.reconcile(room);
-    const alive = (s) => s && (s.leftAt === null || now - s.leftAt < this.seatMs);
+    // hasta que los dos han coincidido se espera más: quien crea la sala suele salir de la app
+    // para mandar el código
+    const keep = room?.met ? this.seatMs : this.emptyMs;
+    const alive = (s) => s && (s.leftAt === null || now - s.leftAt < keep);
     if (room && !room.seats.some(alive)) room = undefined;
 
     let seat;
@@ -207,9 +211,16 @@ export class Room extends DurableObject {
     if (this.seated().length === 2) await this.pair(ip);
   }
 
+  /** true si la conexión ha dado señales hace poco (una app suspendida parece conectada). */
+  fresh(ws) {
+    const ping = this.ctx.getWebSocketAutoResponseTimestamp(ws)?.getTime() || 0;
+    return Date.now() - Math.max(ws.deserializeAttachment().at, ping) < FRESH_MS;
+  }
+
   async pair(ip) {
     let room = await this.ctx.storage.get('room');
     const round = ++room.round;
+    if (this.seated().every((ws) => this.fresh(ws))) room.met = true;
     await this.ctx.storage.put('room', room);
     const cached = room.ice?.until > Date.now() ? room.ice.servers : null;
     const servers = cached || (await this.iceServers(ip));

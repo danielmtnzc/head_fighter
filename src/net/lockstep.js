@@ -19,11 +19,12 @@ const HEADER = 11;
 const FOOTER = 8;
 const MAX_INPUTS = 64;
 const MAX_TICKS = 4; // por llamada a update, para alcanzar al rival sin dar saltos
+const DEBT_FORGIVE = 0.1; // parte del tiempo de cada espera que ya no se recupera
 const KEEP_HASHES = 20;
 export const HASH_EVERY = 30;
 
 /** Fotogramas de retraso adecuados para un ida y vuelta medido en milisegundos. */
-export const delayFor = (rttMs) => Math.min(7, Math.max(2, Math.ceil(rttMs / 2 / (STEP * 1000)) + 1));
+export const delayFor = (rttMs) => Math.min(7, Math.max(3, Math.ceil(rttMs / 2 / (STEP * 1000)) + 1));
 
 export class LockstepSession {
   /**
@@ -94,10 +95,13 @@ export class LockstepSession {
       ran = true;
     }
     if (this.match.phase === 'over') this.acc = 0;
-    // el tiempo sin gastar se conserva (hasta MAX_TICKS) para recuperar al llegar los mandos
+    // el tiempo sin gastar se conserva (hasta MAX_TICKS) para alcanzar al rival al llegar sus mandos
     else if (this.acc >= STEP) {
       this.waiting += dt;
       this.stalls++;
+      // quien espera va por delante: renuncia poco a poco a lo atrasado. Si lo guardara entero,
+      // tras un parón del rival iría para siempre al límite, a tirones
+      this.acc -= dt * DEBT_FORGIVE;
     }
     // se envía también mientras se espera: si no, una pérdida bloquearía a los dos
     this.sendT += dt;

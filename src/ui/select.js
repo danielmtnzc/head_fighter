@@ -15,6 +15,7 @@ export class SelectScreen {
     this.mode = 'cpu';
     this.level = 1;
     this.picks = [0, Math.min(1, roster.length - 1)];
+    this.online = null; // { side, onPick, locked } mientras se elige para una partida online
     this.sides = [...this.root.querySelectorAll('.sel-side')].map((el, side) => this.buildSide(el, side));
 
     this.root.querySelectorAll('[data-mode]').forEach((b) =>
@@ -57,9 +58,12 @@ export class SelectScreen {
       b.style.setProperty('--pc', cfg.color);
       b.innerHTML = '<canvas width="192" height="192"></canvas>';
       b.addEventListener('click', () => {
+        const o = this.online;
+        if (o && (side !== o.side || o.locked)) return; // el rival elige en su móvil
         this.picks[side] = i;
         sfx.select();
         this.refresh(side);
+        o?.onPick(i);
       });
       picks.appendChild(b);
       return b;
@@ -105,7 +109,8 @@ export class SelectScreen {
     const s = this.sides[side];
     const cfg = this.roster[this.picks[side]];
     s.el.style.setProperty('--c', cfg.color);
-    s.el.querySelector('h3').textContent = side === 0 ? 'TÚ' : this.mode === 'cpu' ? 'RIVAL' : 'JUGADOR 2';
+    const mine = side === (this.online?.side ?? 0);
+    s.el.querySelector('h3').textContent = mine ? 'TÚ' : this.online || this.mode === 'cpu' ? 'RIVAL' : 'JUGADOR 2';
     s.el.querySelector('.nm').textContent = cfg.name;
     s.el.querySelector('.badges').innerHTML = groupBadges(cfg);
     s.el.querySelector('.tag').textContent = cfg.tagline || '';
@@ -117,6 +122,50 @@ export class SelectScreen {
     s.el.querySelector('.spd').textContent = cfg.special.description || '';
     s.buttons.forEach((b, i) => b.classList.toggle('on', i === this.picks[side]));
     s.fighter = new Fighter(cfg, side);
+  }
+
+  /** Entra en la selección online manejando el lado `side`; con null vuelve a la local. */
+  setOnline(side, pick, onPick) {
+    if (side === null) {
+      if (!this.online) return;
+      this.online = null;
+      this.picks = this.localPicks;
+    } else {
+      if (!this.online) this.localPicks = [...this.picks];
+      this.online = { side, onPick, locked: false };
+      this.picks[side] = pick;
+    }
+    const on = !!this.online;
+    this.root.classList.toggle('online', on);
+    this.root.querySelector('#btn-back').textContent = on ? '◀ SALIR' : '◀ VOLVER';
+    this.root.querySelector('#btn-fight').textContent = on ? '¡LISTO!' : '¡A PELEAR!';
+    this.sides.forEach((s, i) => {
+      s.el.classList.toggle('rival', on && i !== side);
+      s.el.classList.remove('ready');
+      this.refresh(i);
+      this.showPick(i);
+    });
+  }
+
+  /** Estado que llega de la partida online. */
+  sync({ picks, ready }) {
+    const o = this.online;
+    if (!o) return;
+    this.sides.forEach((s, i) => {
+      if (picks[i] !== undefined && picks[i] !== this.picks[i]) {
+        this.picks[i] = picks[i];
+        this.refresh(i);
+        this.showPick(i);
+      }
+      s.el.classList.toggle('ready', !!ready[i]);
+    });
+    o.locked = !!ready[o.side];
+    this.root.querySelector('#btn-fight').textContent = o.locked ? 'CANCELAR' : '¡LISTO!';
+  }
+
+  /** Muestra el grupo en el que está el personaje elegido. */
+  showPick(side) {
+    this.showGroup(side, groupsOf(this.roster[this.picks[side]])[0]?.id ?? GROUPS[0].id);
   }
 
   get choice() {

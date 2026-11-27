@@ -25,9 +25,11 @@ export class Hud {
     this.root.classList.toggle('hidden', !on);
   }
 
-  bind(match) {
+  /** @param you  lado que maneja este dispositivo (solo online): se marca con «TÚ» */
+  bind(match, you = null) {
     match.fighters.forEach((f, i) => {
       const s = this.sides[i];
+      s.el.classList.toggle('mine', i === you);
       s.el.style.setProperty('--c', f.cfg.color);
       s.name.textContent = f.cfg.name;
       s.enLabel.textContent = f.cfg.special.name;

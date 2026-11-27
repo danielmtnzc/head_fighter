@@ -290,6 +290,35 @@ h2 { font-size: 3.6rem; color: var(--yellow); -webkit-text-stroke: .5rem var(--i
 #screen-pause { background: #160a35e6; }
 @keyframes fadein { from { opacity: 0; } }
 
+/* Online: sala y aviso de red */
+#screen-online { background: #160a35ee; }
+.on-menu { display: flex; flex-direction: column; align-items: center; gap: 1.6rem; }
+#form-join { display: flex; gap: .8rem; align-items: center; }
+#room-input {
+  width: 14rem; font: inherit; font-size: 2.8rem; text-align: center; text-transform: uppercase; letter-spacing: .2em;
+  padding: .4rem; border: .25rem solid var(--ink); border-radius: .7rem; background: #fff; color: var(--ink);
+  user-select: text; -webkit-user-select: text;
+}
+.on-room { font-size: 7rem; line-height: 1; letter-spacing: .25em; color: var(--yellow); user-select: text; -webkit-user-select: text; }
+.on-status { font-size: 2rem; min-height: 2.4rem; text-align: center; user-select: text; -webkit-user-select: text; }
+.sel-status { display: none; flex: 1; text-align: center; font-size: 2rem; color: var(--cyan); }
+#screen-select.online .sel-status { display: block; }
+#screen-select.online .diff { display: none; }
+.sel-side.rival .groups, .sel-side.rival .picks-wrap { opacity: .45; pointer-events: none; }
+.sel-side.ready { border-color: var(--cyan); box-shadow: 0 0 1.4rem var(--cyan); }
+.sel-side.ready h3::after { content: ' · ¡LISTO!'; color: var(--cyan); }
+.res-status { font-size: 2rem; min-height: 2.4rem; margin-top: .3rem; color: var(--cyan); text-shadow: 0 .15rem 0 var(--ink); }
+.res-actions button:disabled { opacity: .55; pointer-events: none; }
+.hud-side.mine .name::after {
+  content: 'TÚ'; display: inline-block; margin: 0 .5rem; padding: .1rem .4rem 0; font-size: 1.1rem; vertical-align: middle;
+  -webkit-text-stroke: 0; background: var(--cyan); color: var(--ink); border-radius: .3rem;
+}
+#net {
+  position: fixed; left: 0; right: 0; top: 7.5rem; z-index: 6; text-align: center; pointer-events: none;
+  font-family: system-ui, sans-serif; font-weight: 700; font-size: .9rem; color: #fff; text-shadow: 0 .1rem .3rem #000;
+  white-space: pre-line;
+}
+
 /* Aviso de orientación (solo móviles en vertical) */
 #rotate {
   display: none; position: fixed; inset: 0; z-index: 99; background: #160a35; flex-direction: column;

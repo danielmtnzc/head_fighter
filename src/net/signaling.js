@@ -5,7 +5,9 @@
 import { PROTO, WORKER_URL } from './config.js';
 
 const LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // sin I ni O, que se confunden con 1 y 0
-const GIVE_UP_MS = 50_000; // algo menos de lo que la sala guarda el asiento
+// algo menos de lo que la sala guarda el asiento (mucho más mientras no ha habido rival)
+const GIVE_UP_MS = 50_000;
+const GIVE_UP_ALONE_MS = 290_000;
 
 export const randomCode = () => Array.from(crypto.getRandomValues(new Uint32Array(4)), (n) => LETTERS[n % LETTERS.length]).join('');
 
@@ -28,6 +30,7 @@ export class Signaling {
     this.pingMs = pingMs;
     this.pongMs = pongMs;
     this.token = null;
+    this.joined = false; // dentro de la sala por la conexión actual
     this.closed = false;
     this.retries = 0;
     this.lostAt = null;
@@ -48,6 +51,11 @@ export class Signaling {
     this.role = 'unirse';
     this.code = code;
     this.open();
+  }
+
+  /** true si ahora mismo se llega al servidor de salas. */
+  get online() {
+    return this.joined && this.ws?.readyState === WebSocket.OPEN;
   }
 
   /** Mensaje para el rival (oferta, respuesta o candidato). Se pierde si él no está. */
@@ -120,10 +128,14 @@ export class Signaling {
     }
     if (msg.t === 'sala') {
       this.token = msg.token;
+      this.joined = true;
       this.retries = 0;
       this.lostAt = null;
       this.on.sala?.({ code: msg.code, asiento: msg.asiento });
-    } else if (msg.t === 'emparejados') this.on.emparejados?.(msg.ice, msg.ronda);
+    } else if (msg.t === 'emparejados') {
+      this.paired = true;
+      this.on.emparejados?.(msg.ice, msg.ronda);
+    }
     else if (msg.t === 'senal') this.on.senal?.(msg.data);
     else if (msg.t === 'rival-fuera') this.on.rivalFuera?.(msg.definitivo);
     else if (msg.t === 'error') {
@@ -138,11 +150,12 @@ export class Signaling {
   }
 
   lost() {
+    this.joined = false;
     this.stopTimers();
     if (this.closed) return;
     if (!this.token) return this.fail('conexion');
     this.lostAt ??= Date.now();
-    if (Date.now() - this.lostAt > GIVE_UP_MS) return this.fail('conexion');
+    if (Date.now() - this.lostAt > (this.paired ? GIVE_UP_MS : GIVE_UP_ALONE_MS)) return this.fail('conexion');
     this.on.reconectando?.();
     const wait = Math.min(500 * 2 ** this.retries++, 5000);
     this.retry = setTimeout(() => this.open(), wait);
